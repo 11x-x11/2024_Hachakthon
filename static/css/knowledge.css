@@ -1,0 +1,163 @@
+/* Specific styles for the Knowledge Repository tab */
+#Knowledge\ Repository {
+    margin-top: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+#Knowledge\ Repository #articles {
+    width: calc(100% - 100px);
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    max-height: 420px;
+    overflow-y: auto;
+}
+
+#Knowledge\ Repository #make_article {
+    width: calc(100% - 100px);
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+#Knowledge\ Repository .article-setting {
+    background: transparent;
+    border: none;
+    width: 100%;
+    font-size: 1.2em;
+    line-height: 1.3em;
+}
+
+#Knowledge\ Repository input.article-setting {
+    max-height: 2em;
+}
+
+#Knowledge\ Repository textarea.article-setting {
+    min-height: 8em;
+}
+
+#Knowledge\ Repository .comment-setting {
+    background: transparent;
+    border: none;
+    width: 100%;
+    font-size: 1em;
+    line-height: 1.2em;
+    min-height: 4em;
+}
+
+#Knowledge\ Repository .flex-col-end {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+#Knowledge\ Repository .flex-row-center {
+    display: flex;
+    justify-content: center;
+}
+
+#Knowledge\ Repository .article {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+
+#Knowledge\ Repository .article h3 {
+    margin: 0 0 10px;
+}
+
+#Knowledge\ Repository .comments {
+    margin-top: 10px;
+}
+
+#Knowledge\ Repository .comments h4 {
+    margin: 0 0 5px;
+}
+
+#Knowledge\ Repository .comments ul {
+    list-style: none;
+    padding: 0;
+}
+
+#Knowledge\ Repository .comments ul li {
+    border-bottom: 1px solid #ddd;
+    padding: 5px 0;
+}
+
+#Knowledge\ Repository .input-box {
+    width: calc(100% - 100px);
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+#Knowledge\ Repository .button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #333;
+    color: white;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#Knowledge\ Repository .button:hover {
+    background-color: #555;
+}
+
+#Knowledge\ Repository .heart {
+    --c: #535353;
+    width: 24px;
+    aspect-ratio: 1;
+    background: radial-gradient(at 70% 31%, var(--c) 29%, #0000 30%),
+    radial-gradient(at 30% 31%, var(--c) 29%, #0000 30%),
+    linear-gradient(var(--c) 0 0) bottom/100% 50% no-repeat;
+    clip-path: polygon(-43% 0, 50% 91%, 143% 0);
+    cursor: pointer;
+}
+
+#Knowledge\ Repository .liked {
+    --c: red;
+}
+
+#Knowledge\ Repository .margin-4 {
+    margin: 4px;
+}
+
+/* Tab styles specific to Knowledge Repository */
+#Knowledge\ Repository .tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+#Knowledge\ Repository .tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+#Knowledge\ Repository .tab button:hover {
+    background-color: #ddd;
+}
+
+#Knowledge\ Repository .tab button.active {
+    background-color: #ccc;
+}
+
+#Knowledge\ Repository .tabcontent {
+    display: none;
+    padding: 20px;
+}

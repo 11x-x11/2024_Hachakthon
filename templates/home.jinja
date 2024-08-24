@@ -2,14 +2,25 @@
 
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/knowledge.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/friend.css') }}">
+
+
+
 {% endblock %}
 
 {% block title %}Home{% endblock %}
 
 {% block content %}
+
+
     <!-- Add the text logo at the top-left corner -->
     <div class="header-container">
-        <div class="logo">Swap</div>
+        <div class="logo">SkillSync</div>
+        
+        <div class="header-right">
+        <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
         <div class="profile-icon">
             {% if user.profile_image %}
                 <a href="{{ url_for('profile') }}">
@@ -24,42 +35,201 @@
             {% endif %}
         </div>
     </div>
-
+    
+    </div>
     <!-- Navigation Tabs -->
     <div class="tab">
         <button class="tablinks" onclick="openTab(event, 'Home')" id="defaultOpen">HOME</button>
         <button class="tablinks" onclick="openTab(event, 'Skill List')">SKILLS</button>
-        <button class="tablinks" onclick="openTab(event, 'Knowledge Repository')">Knowledge Repo</button>
+        <button class="tablinks" onclick="openTab(event, 'Knowledge Repository')">KNOWLEDGE</button>
         <button class="tablinks" onclick="openTab(event, 'Chat')">CHAT</button>
         <button class="tablinks" onclick="openTab(event, 'Friend List')">FRIENDS</button>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="tabcontent" id="Home">
-            <div class="content-box">
+<div class="main-content">
+    <div class="tabcontent" id="Home">
+        <div class="content-box">
+            <!-- Left section with the image and welcome message -->
+            <div class="left-section">
+                <!-- Display the homepage image -->
+                <img src="{{ url_for('static', filename='images/homepage.png') }}" alt="Home Image" class="homepage-image">
+
+                <!-- Welcome message -->
                 <h2>Welcome, {{ username }}!</h2>
-                <p>This is your personal home page.</p>
-                <a href="{{ url_for('logout') }}">Logout</a>
+                <p>Connect with these potential skill exchange partners:</p>
+            </div>
+
+                    <!-- Right section with the recommended people boxes -->
+            <div class="right-section">
+                <div class="people-grid">
+                    <div class="person-box">
+                        <img src="{{ url_for('static', filename='images/person1.jpeg') }}" alt="Person 1" class="person-image">
+                        <p class="person-description">Expert in Python and Machine Learning</p>
+                    </div>
+                    <div class="person-box">
+                        <img src="{{ url_for('static', filename='images/person2.jpeg') }}" alt="Person 2" class="person-image">
+                        <p class="person-description">Specialist in Web Development and JavaScript</p>
+                    </div>
+                    <div class="person-box">
+                        <img src="{{ url_for('static', filename='images/person3.jpeg') }}" alt="Person 3" class="person-image">
+                        <p class="person-description">Data Analysis and Visualization Expert</p>
+                    </div>
+                    <div class="person-box">
+                        <img src="{{ url_for('static', filename='images/person4.jpeg') }}" alt="Person 4" class="person-image">
+                        <p class="person-description">Proficient in Java and Android Development</p>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
 
-        <div class="tabcontent" id="Skill List">
-            <!-- Content for Skill List -->
-        </div>
-
-        <div class="tabcontent" id="Knowledge Repository">
-            <!-- Content for Knowledge Repository -->
-        </div>
-
-        <div class="tabcontent" id="Chat">
-            <!-- Content for Chat -->
-        </div>
-
-        <div class="tabcontent" id="Friend List">
-            <!-- Content for Friend List -->
+    <div class="tabcontent" id="Skill List">
+        <div class="skill-list-container">
+            {% for category in categories %}
+                <div class="category-column">
+                    <h3>{{ category.name }}</h3>
+                    <ul>
+                        {% for skill in category.skills %}
+                            <li><a href="#" class="skill-link" data-skill-id="{{ skill.id }}">{{ skill.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% if loop.index % 5 == 0 %}
+                    </div><div class="skill-list-container">
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
+<div class="tabcontent" id="Knowledge Repository">
+    <section class="knowledge-repository">
+        <h2>Knowledge Repository</h2>
+        <div id="articles">
+            {% for article in articles %}
+                <div class="article" id="article_{{ article.id }}">
+                    <form method="POST" action="{{ url_for('modify_article', article_id=article.id) }}">
+                        <div class="flex-row">
+                            <input type="text" class="article-setting" name="title" value="{{ article.title }}" id="article_title_{{ article.id }}" readonly />
+                            <h4>by {{ article.author }} ({{ article.author_role }})</h4>
+                        </div>
+                        <textarea class="article-setting" name="content" id="article_content_{{ article.id }}" readonly>{{ article.content }}</textarea>
+                        <div class="flex-row">
+                            <button type="button" id="modify_button_{{ article.id }}" onclick="toggleEditMode('{{ article.id }}')" class="button margin-4">Modify</button>
+                            <button type="submit" id="save_button_{{ article.id }}" class="button margin-4" style="display: none;">Save</button>
+                        </div>
+                    </form>
+                    <form method="POST" action="{{ url_for('delete_article', article_id=article.id) }}">
+                        <button type="submit" class="button margin-4">Delete</button>
+                    </form>
+
+                    <div class="comments">
+                        <h4>Comments</h4>
+                        <ul id="comment_list_{{ article.id }}">
+                            {% for comment in article.comments %}
+                                <li id="comment_{{ comment.id }}">
+                                    {{ comment.author }} ({{ comment.author_role }}): {{ comment.content }}
+                                    <form method="POST" action="{{ url_for('delete_comment', comment_id=comment.id) }}">
+                                        <button type="submit" class="button">Delete</button>
+                                    </form>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <form method="POST" action="{{ url_for('add_comment', article_id=article.id) }}">
+                             <input type="hidden" name="username" value="{{ username }}">
+                            <input type="text" placeholder="Add a comment" name="content" class="input-box" id="make_comment_{{ article.id }}" required>
+                            <button type="submit" class="button">Add Comment</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div>
+            <form method="POST" action="{{ url_for('create_article') }}">
+                <input type="hidden" name="username" value="{{ username }}">
+                <input type="text" placeholder="Title" name="title" class="input-box" id="article_title" required>
+                <textarea name="content" id="make_article" placeholder="Content" rows="6" required></textarea>
+                <div class="flex-row-center">
+                    <button type="submit" class="btn primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+
+
+    <div class="tabcontent" id="Chat">
+        <div class="video-container">
+            <video id="localVideo" autoplay muted></video>
+            <video id="remoteVideo" autoplay></video>
+        </div>
+        <button onclick="startVideoChat()">Start Video Chat</button>
+        <button onclick="stopVideoChat()">Stop Video Chat</button>
+
+         <div id="textChat" class="text-chat hidden">
+            <div id="chatWindow">
+                <!-- Chat messages will go here -->
+            </div>
+            <input type="text" id="chatInput" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    
+    <div class="tabcontent" id="Friend List">
+        <div class="container">
+            <div class="friend-section">
+                <div id="friend-list-container">
+                    <table id="friend-list-table">
+                        <thead>
+                            <tr>
+                                <th>Friend's Username</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for friend in friends %}
+                            <tr id="friend_{{ friend.username }}">
+                                <td><span class="clickable_name" username="{{ friend.username }}">{{ friend.username }}</span></td>
+                                <td><button onclick="removeFriend('{{ friend.username }}')" class="remove-button">Remove</button></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+        <!-- Friend Requests and Add Friends on the right -->
+            <div class="friend-requests-section">
+                <div class="container">
+                <section id="friend_requests">
+                    <h2>Incoming Friend Requests</h2>
+                    <ul id="friend_requests_list">
+                        {% if friend_requests %}
+                            {% for request in friend_requests %}
+                                <li id="request_{{ request.id }}">
+                                    {{ request.sender_username }} wants to be your friend
+                                    <button onclick="acceptFriendRequest('{{ request.id }}')" class="button">Accept</button>
+                                    <button onclick="declineFriendRequest('{{ request.id }}')" class="button decline">Decline</button>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li id="no_requests">No incoming friend requests.</li>
+                        {% endif %}
+                    </ul>
+                </section>
+
+                <section id="add_friends">
+                    <p class="text">Add Friend:</p>
+                    <input type="text" id="friendUsername" placeholder="Enter friend's username" class="input-box">
+                    <button onclick="sendFriendRequest()" class="button">Add Friend</button>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <footer>
+        <p>&copy; 2024 . All rights reserved.</p>
+    </footer>
 
     <!-- Guide Container -->
     <div id="guide-container" style="display: none;">
@@ -68,10 +238,18 @@
             <button id="guide-next-btn">Next</button>
         </div>
     </div>
+    
+    <input type="hidden" id="currentUsername" value="{{ username }}">
 
-    <footer>
-        <p>&copy; 2024 . All rights reserved.</p>
-    </footer>
+    <script>
+        var username = "{{ username }}";
+    </script>
+
+    <script src="/static/js/libs/socket.io.min.js"></script>
 
     <script src="{{ url_for('static', filename='js/home.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/knowledge.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/chat.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/friend.js') }}" defer></script>
+
 {% endblock %}

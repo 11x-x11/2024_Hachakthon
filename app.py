@@ -5,8 +5,12 @@ import db
 import requests
 import geonamescache
 import pycountry
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)  # This will enable CORS for all routes
+
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 GEONAMES_USERNAME = 'your_geonames_username'
 
@@ -81,13 +85,15 @@ def signup_user():
 
 @app.route("/home")
 def home():
-    user = db.get_user(session['username'])
-    
+    username = session.get('username')
+    user = db.get_user(username)
     if 'username' not in session:
         return redirect(url_for('login'))
-    
+
     categories = db.get_all_categories()
-    return render_template("home.jinja", username=session['username'], user=user, categories=categories)
+    article_list = db.get_all_articles_with_details(username)
+
+    return render_template("home.jinja", username=session['username'], user=user, categories=categories, articles=article_list)
 
 @app.route("/logout")
 def logout():
@@ -134,7 +140,9 @@ def edit_profile():
     bio = request.form.get("bio")
     profile_image = request.files.get('profile_image')
     
-    selected_skill_ids = request.form.getlist('skills[]')
+    skill_ids = request.form.getlist('skills[]')
+    interested_skill_ids = request.form.getlist('interested_skills[]')
+    
     
     db.update_user_profile(
         username=username,
@@ -144,7 +152,8 @@ def edit_profile():
         city=city,
         bio=bio,
         profile_image=profile_image,
-        selected_skill_ids=selected_skill_ids
+        selected_skill_ids=skill_ids,
+        interested_skill_ids=interested_skill_ids
     )
     
     return redirect(url_for('profile'))
@@ -173,30 +182,27 @@ def get_skills():
     else:
         return jsonify({'error': 'Category ID not provided'}), 400
 
-@app.route('/find_matching_user_and_redirect')
-def find_matching_user_and_redirect():
-    skill_id = request.args.get('skill_id', type=int)
-
-    if not skill_id:
-        return jsonify({'error': 'Skill ID is required'}), 400
+@socketio.on('find_matching_user')
+def handle_find_matching_user(data):
+    skill_id = data.get('skill_id')
+    username = session.get('username')
+    user = db.get_user(username)
 
     try:
-        # Get the current user
-        user = db.get_user(session['username'])
-
-        # Find a matching user who wants to learn this skill
+        # Find a matching user
         matching_user = db.find_matching_user(skill_id, user)
 
         if matching_user:
             # Create or find a chatroom for these users
-            chatroom_url = db.create_chatroom_for_users(user, matching_user)
+            chatroom = db.create_chatroom_for_users(user, matching_user)
 
-            return jsonify({'chatroom_url': chatroom_url})
+            emit('matching_user_result', {'chatroom_url': url_for('chatroom', chatroom_id=chatroom.id)})
         else:
-            return jsonify({'error': 'No matching users found'}), 404
+            emit('matching_user_result', {'error': 'No matching users found'})
     except Exception as e:
-        app.logger.error(f"Error finding matching user for skill {skill_id}: {e}")
-        return jsonify({'error': 'An error occurred while finding a matching user'}), 500
+        print(f"Error finding matching user for skill {skill_id}: {e}")
+        emit('matching_user_result', {'error': 'An error occurred while finding a matching user'})
+
 
 @app.route('/chatroom/<int:chatroom_id>')
 def chatroom(chatroom_id):
@@ -204,7 +210,97 @@ def chatroom(chatroom_id):
     if not chatroom:
         abort(404)
     
-    return render_template('chatroom.jinja', chatroom=chatroom)
+    user = db.get_user(session['username'])
+    is_initiator = db.get_user_role_in_chatroom(user, chatroom)
+    
+    socketio.emit('initiate_status', {'is_initiator': is_initiator}, room=chatroom_id)
+
+    return redirect(url_for('home'))
+
+
+@app.route('/create_article', methods=['POST'])
+def create_article():
+    title = request.form['title']
+    content = request.form['content']
+    username = request.form['username']
+    
+    if db.create_article(title, content, username):
+        flash('Article created successfully!', 'success')
+    else:
+        flash('Failed to create article!', 'error')
+
+    return redirect(url_for('home'))
+
+@app.route('/modify_article/<string:article_id>', methods=['POST'])
+def modify_article(article_id):
+    title = request.form['title']
+    content = request.form['content']
+    
+    if db.modify_article(int(article_id), title, content):
+        flash('Article modified successfully!', 'success')
+    else:
+        flash('Failed to modify article!', 'error')
+    return redirect(url_for('home'))
+
+# Route to delete an article
+@app.route('/delete_article/<string:article_id>', methods=['POST'])
+def delete_article(article_id):
+    if db.elete_article(int(article_id)):
+        flash('Article deleted successfully!', 'success')
+    else:
+        flash('Failed to delete article!', 'error')
+    
+    return redirect(url_for('home'))
+
+# Route to add a comment to an article
+@app.route('/add_comment/<string:article_id>', methods=['POST'])
+def add_comment(article_id):
+    content = request.form['content']
+    username = session.get('username')
+    
+    if db.add_comment(article_id, content, username):
+        flash('Comment added successfully!', 'success')
+    else:
+        flash('Failed to add comment!', 'error')
+        
+    return redirect(url_for('home'))
+
+# Route to delete a comment
+@app.route('/delete_comment/<string:comment_id>', methods=['POST'])
+def delete_comment(comment_id):
+    if db.delete_comment(comment_id):
+        flash('Comment deleted successfully!', 'success')
+    else:
+        flash('Failed to delete comment!', 'error')
+        
+    return redirect(url_for('home'))
+
+@socketio.on('my_event')
+def handle_my_event(json):
+    print('Received event: ' + str(json))
+    emit('response', {'data': 'Server received your message!'})
+
+@socketio.on('start_video_chat')
+def handle_start_video_chat(data):
+    username = data['username']
+    print(f"{username} wants to start a video chat")
+    # Notify the other user(s) to start the video chat
+    emit('video_chat_start', data, broadcast=True)
+
+@socketio.on('video_offer')
+def handle_video_offer(data):
+    # Forward the offer to the other peer
+    emit('video_offer', data, broadcast=True)
+
+@socketio.on('video_answer')
+def handle_video_answer(data):
+    # Forward the answer to the other peer
+    emit('video_answer', data, broadcast=True)
+
+@socketio.on('ice_candidate')
+def handle_ice_candidate(data):
+    # Forward the ICE candidate to the other peer
+    emit('ice_candidate', data, broadcast=True)
 
 
 if __name__ == '__main__':

@@ -21,6 +21,28 @@ body {
     padding: 20px;
 }
 
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.logout-button {
+    margin-right: 20px;
+    padding: 10px 15px;
+    background-color: #aa3953;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+    background-color: #d32f2f;
+}
+
 .logo {
     font-size: 48px;
     font-weight: 700;
@@ -89,6 +111,8 @@ nav ul li a:hover {
     transition: background-color 0.3s ease;
     font-size: 17px;
     text-align: center;
+    font-family: 'Ubuntu', sans-serif; /* Change font to Ubuntu */
+    color: #ffffff; /* Set font color to white */
 }
 
 /* Hover effect for the tab buttons */
@@ -98,32 +122,15 @@ nav ul li a:hover {
 
 /* Active tab button */
 .tab button.active {
-    background-color: #ccc;
+    background-color: #aa3953;
+    color: #ffffff; /* Desired font color for active tab */
 }
 
-/* Content under each tab */
 .tabcontent {
-    display: none;
+    flex: 1; /* Make it flexible to fit the available space */
     padding: 20px;
-    border: 1px solid #ccc;
-    border-top: none;
     background-color: rgba(255, 255, 255, 0.9); /* Match the tab background */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow to the content area */
-}
-
-#Home {
-    background-color: rgba(255, 255, 255, 0.7); /* White background with 70% opacity */
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-    position: relative;
-    z-index: 1; /* Ensure content is above the overlay */
-    margin: auto; /* Center horizontally */
-    margin-top: auto; /* Push downwards */
-    margin-bottom: auto; /* Push upwards */
+    overflow-y: auto; /* Enable vertical scrolling within this area */
 }
 
 .main-content {
@@ -140,23 +147,13 @@ h2 {
     color: #aa3953; /* Font color */
     font-family: 'Ubuntu', sans-serif;
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 28px;
 }
 p {
     font-family: 'Ubuntu', sans-serif;
     color: #aa3953; /* Font color */
     font-weight: 500;
-}
-.bottom-image {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: auto;
-    max-width: 100%;
-    height: auto;
-    max-height: 25%; /* Adjust this to control the height of the image */
-    z-index: 0;
+    font-size: 18px;
 }
 
 footer {
@@ -173,6 +170,87 @@ footer {
 footer p {
     margin: 0;
     font-size: 14px;
+}
+
+/* Flex container for the image, welcome message, and people boxes */
+.content-box {
+    display: flex;
+    justify-content: space-between; /* Space between the left and right sections */
+    align-items: flex-start; /* Align items to the top */
+    
+    background-color: transparent; /* Remove background color */
+    padding: 50px;
+    border-radius: 0px;
+    box-shadow: none; /* Remove shadow */
+    max-width: 1200px; /* Adjust the max-width as needed */
+    width: 100%; /* Full width */
+    margin: auto; /* Center the content box */
+    gap: 40px; /* Space between the left and right sections */
+}
+
+/* Left section for the image and welcome message */
+.left-section {
+    flex: 1; /* Allow the section to grow */
+    max-width: 65%; /* Restrict the width */
+}
+
+/* Image styling */
+.homepage-image {
+    width: 100%;
+    max-width: 130%; /* Control the image size */
+    margin-bottom: 30px;
+}
+
+/* Right section for people grid */
+.right-section {
+    flex: 1; /* Allow the section to grow */
+    display: flex;
+    justify-content: center; /* Center the grid horizontally */
+    align-items: center; /* Center the grid vertically */
+    height: 100%; /* Ensure the right section takes the full height */
+}
+
+/* Grid for recommended people */
+.people-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Create two equal columns */
+    grid-gap: 30px; /* Space between the boxes */
+    justify-items: center; /* Center items within the grid */
+    width: 100%;
+    max-width: 400px; /* Control the width of the grid */
+    margin: auto; /* Center the grid within the right section */
+    
+}
+
+.person-image {
+    width: 150px; /* Ensure width and height are the same */
+    height: 150px; /* Ensure width and height are the same */
+    display: block;
+    object-fit: cover;
+    border-radius: 50%; /* Makes the image a circle */
+    margin: 0 auto; /* Center the image */
+}
+
+/* Each person's box */
+.person-box {
+    background-color: #acd7cd;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 150px; /* Set a fixed width */
+    height: 200px; /* Set the height equal to the width to make it square */
+    display: block;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px; /* Adjust font size as needed */
+    margin-bottom: 20px;
+}
+
+.person-description {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555; /* Subtle color for the description */
 }
 
 /* Skill List styling */
@@ -215,6 +293,7 @@ footer p {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     max-width: 1600px;
     width: 100%;
+    overflow-y: auto;
 }
 
 /* Specific styling for the Skill List tab */
@@ -299,10 +378,6 @@ footer p {
 
     .profile-icon {
         margin-top: 10px;
-    }
-
-    #Home {
-        max-width: 100%;
     }
 
     #Skill\ List {

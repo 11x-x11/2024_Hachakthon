@@ -12,12 +12,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Attach the loadSubskills function to the category change event
-    document.getElementById('category').addEventListener('change', loadSubskills);
+    document.getElementById('category').addEventListener('change', () => loadSubskills('skills'));
+    document.getElementById('interested_category').addEventListener('change', () => loadSubskills('interested_skills'));
+
 });
 
-function loadSubskills() {
-    const categoryId = document.getElementById('category').value;
-    const skillSelect = document.getElementById('skills');
+function loadSubskills(skillType = 'skills') {
+    const categorySelectId = skillType === 'skills' ? 'category' : 'interested_category';
+    const skillSelectId = skillType === 'skills' ? 'skills' : 'interested_skills';
+
+    const categoryId = document.getElementById(categorySelectId).value;
+    const skillSelect = document.getElementById(skillSelectId);
 
     // Clear previous skill options
     skillSelect.innerHTML = '';
@@ -45,42 +50,45 @@ function loadSubskills() {
 }
 
 function toggleEditMode(cancel = false) {
-    const formElements = document.querySelectorAll('#email, #dob, #country, #city, #bio, #category, #skills');
+    const isEditMode = !cancel;
+
+    const readOnlyFields = document.querySelectorAll('#email, #dob, #bio');
+    const disabledFields = document.querySelectorAll('#country, #city, #category, #skills, #interested_category, #interested_skills');
+
     const editButton = document.getElementById('edit-profile-button');
     const saveButton = document.getElementById('save-changes-button');
     const cancelButton = document.getElementById('cancel-edit-button');
     const imageUploadGroup = document.querySelector('.image-upload-group');
 
-    if (editButton.style.display !== 'none' && !cancel) {
-        formElements.forEach(element => {
-            element.removeAttribute('readonly');
-            element.classList.add('editable');
-            if (element.tagName === 'SELECT') {
-                element.disabled = false;
-            }
-        });
-        imageUploadGroup.style.display = 'flex';
+    // Toggle readonly for input and textarea fields
+    readOnlyFields.forEach(field => {
+        if (isEditMode) {
+            field.removeAttribute('readonly');
+        } else {
+            field.setAttribute('readonly', 'readonly');
+        }
+    });
+
+    // Toggle disabled for select fields
+    disabledFields.forEach(field => {
+        if (isEditMode) {
+            field.removeAttribute('disabled');
+        } else {
+            field.setAttribute('disabled', 'disabled');
+        }
+    });
+
+    // Toggle buttons and image upload section
+    if (isEditMode) {
         editButton.style.display = 'none';
-        saveButton.style.display = 'block';
-        cancelButton.style.display = 'block';
+        saveButton.style.display = 'inline-block';
+        cancelButton.style.display = 'inline-block';
+        imageUploadGroup.style.display = 'block'; // Show the image upload section
     } else {
-        formElements.forEach(element => {
-            element.setAttribute('readonly', true);
-            element.classList.remove('editable');
-            if (element.tagName === 'SELECT') {
-                element.disabled = true;
-            }
-            if (cancel) {
-                element.value = element.defaultValue;
-            }
-        });
-        imageUploadGroup.style.display = 'none';
-        editButton.style.display = 'block';
+        editButton.style.display = 'inline-block';
         saveButton.style.display = 'none';
         cancelButton.style.display = 'none';
-        if (cancel) {
-            document.getElementById('profile_image').value = '';
-        }
+        imageUploadGroup.style.display = 'none'; // Hide the image upload section
     }
 }
 
