@@ -30,34 +30,6 @@ body {
     z-index: 1000;
 }
 
-.flash-message {
-    display: inline-block;
-    padding: 15px 25px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    opacity: 0.95;
-    animation: fadeInOut 5s ease-in-out;
-}
-
-.flash-message.success {
-    background-color: #28a745;
-    color: #fff;
-}
-
-.flash-message.error {
-    background-color: #dc3545;
-    color: #fff;
-}
-
-@keyframes fadeInOut {
-    0% { opacity: 0; transform: translateY(-20px); }
-    10% { opacity: 0.95; transform: translateY(0); }
-    90% { opacity: 0.95; transform: translateY(0); }
-    100% { opacity: 0; transform: translateY(-20px); }
-}
-
 /* Sidebar styling */
 .profile-sidebar {
     width: 35%;
@@ -100,6 +72,8 @@ body {
 .profile-main {
     width: 65%;
     padding: 40px;
+    overflow-y: auto; /* Allows scrolling if content exceeds container height */
+    max-height: 100vh; /* Prevents content from overflowing */
 }
 
 .profile-main h1 {
@@ -123,7 +97,8 @@ body {
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
@@ -135,7 +110,8 @@ body {
 }
 
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
     border-color: #007BFF;
     outline: none;
     background-color: #fff;
@@ -146,6 +122,21 @@ body {
     min-height: 100px;
 }
 
+/* Added specific styling for skill checkboxes */
+#skills-checkboxes {
+    max-height: 200px; /* Limit height */
+    overflow-y: auto;  /* Add scroll if content overflows */
+    border: 1px solid #ccc; /* Optional: to make it look like a container */
+    padding: 10px;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+}
+
+.checkbox-item {
+    margin-bottom: 10px;
+}
+
+/* Other existing styling */
 .image-upload-group {
     display: flex;
     align-items: center;
@@ -212,4 +203,41 @@ body {
 
 .cancel-button:hover {
     background-color: #c82333;
+}
+
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 10px 15px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+    color: #333;
+}
+
+.back-button:hover {
+    background-color: #e0e0e0;
+}
+
+/* Ensure the select element is not being styled in a way that disables interactions */
+select[multiple] {
+    height: auto;
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    font-size: 16px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+select[multiple]:focus {
+    border-color: #007BFF;
+    outline: none;
+    background-color: #fff;
 }

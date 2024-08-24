@@ -5,24 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Profile</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
-    <style>
-        .back-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            padding: 10px 15px;
-            background-color: #f0f0f0;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            text-decoration: none;
-            color: #333;
-        }
-        .back-button:hover {
-            background-color: #e0e0e0;
-        }
-    </style>
 </head>
 <body>
     <a href="{{ url_for('home') }}" class="back-button">← Back</a>
@@ -37,7 +19,6 @@
             </div>
             <div class="profile-details">
                 <h2>{{ user.username }}</h2>
-                <p class="location">{{ user.location or 'Location not provided' }}</p>
             </div>
         </div>
         <div class="profile-main">
@@ -52,16 +33,43 @@
                     <input type="date" name="dob" id="dob" value="{{ user.dob.strftime('%Y-%m-%d') if user.dob else '' }}" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="latitude">Latitude:</label>
-                    <input type="text" name="latitude" id="latitude" value="{{ user.latitude or '' }}" readonly>
+                    <label for="country">Country:</label>
+                    <select name="country" id="country" onchange="loadCities()" disabled>
+                        <option value="">Select a country</option>
+                        {% for code, name in countries %}
+                            <option value="{{ code }}" {% if user.country == code %}selected{% endif %}>{{ name }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="longitude">Longitude:</label>
-                    <input type="text" name="longitude" id="longitude" value="{{ user.longitude or '' }}" readonly>
+                    <label for="city">City:</label>
+                    <select name="city" id="city" disabled>
+                        <option value="">Select a city</option>
+                        {% if user.city %}
+                            <option value="{{ user.city }}" selected>{{ user.city }}</option>
+                        {% endif %}
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="bio">Short Bio:</label>
                     <textarea name="bio" id="bio" rows="5" readonly>{{ user.bio or '' }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <select name="category" id="category" onchange="loadSubskills()" disabled>
+                        <option value="">Select a category</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="skills">Skills:</label>
+                    <select name="skills[]" id="skills" multiple disabled>
+                        <!-- This will be populated dynamically -->
+                        <option value="">Select skills</option>
+                    </select>
                 </div>
                 <div class="form-group image-upload-group" style="display: none;">
                     <label for="profile_image" class="upload-label">Upload New Image:</label>

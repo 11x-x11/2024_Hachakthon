@@ -116,7 +116,7 @@ nav ul li a:hover {
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
+    max-width: 400px;
     width: 100%;
     text-align: center;
     position: relative;
@@ -175,4 +175,142 @@ footer p {
     font-size: 14px;
 }
 
+/* Skill List styling */
+.category {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
+.category h3 {
+    margin-top: 0;
+    color: #aa3953;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 700;
+}
+
+.category ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category ul li {
+    padding: 8px;
+    font-family: 'Ubuntu', sans-serif;
+    color: #555;
+    border-bottom: 1px solid #ddd;
+}
+
+.category ul li:last-child {
+    border-bottom: none;
+}
+
+#Skill\ List {
+    background-color: rgba(255, 255, 255, 0.7); /* White background with 70% opacity */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    max-width: 1600px;
+    width: 100%;
+}
+
+/* Specific styling for the Skill List tab */
+#Skill\ List .skill-list-container {
+    max-width: 1600px; /* Adjust the width as needed */
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-height: 500px; /* Set the maximum height of the scrollable area */
+    overflow-y: scroll; /* Enable vertical scrolling */
+    padding-right: 10px; /* Optional: add padding to avoid content being cut off by the scrollbar */
+}
+
+/* Category column styling for the Skill List tab */
+#Skill\ List .category-column {
+    flex: 1 1 23%; /* Adjust this value to distribute columns better */
+    margin: 10px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure the h3 elements inside the category columns are styled correctly */
+#Skill\ List .category-column h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #aa3953;
+}
+
+#Skill\ List .category-column ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#Skill\ List .category-column ul li {
+    font-size: 16px;
+    padding: 5px 0;
+    color: #555;
+    border-bottom: 1px solid #ddd;
+}
+
+#Skill\ List .category-column ul li:last-child {
+    border-bottom: none;
+}
+
+/* Style for the clickable skill link */
+.skill-link {
+    color: #4f4f4f; /* Text color */
+    font-family: 'Ubuntu', sans-serif; /* Font family */
+    font-weight: 700; /* Font weight */
+    text-decoration: none; /* Remove underline from link */
+    cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
+    padding: 5px 10px; /* Add some padding */
+    border-radius: 5px; /* Round the corners slightly */
+    transition: color 0.3s ease, background-color 0.3s ease; /* Add transition for smooth color change */
+}
+
+/* Hover effect for the skill link */
+.skill-link:hover {
+    color: #ffffff; /* Text color on hover */
+    background-color: #acd7cd; /* Background color on hover */
+}
+
+/* Active/Selected state */
+.skill-link:active {
+    background-color: #acd7cd; /* Darker background color when active/pressed */
+    color: #ffffff; /* Keep text white when active/pressed */
+}
+
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .tab button {
+        font-size: 14px;
+    }
+
+    .profile-icon {
+        margin-top: 10px;
+    }
+
+    #Home {
+        max-width: 100%;
+    }
+
+    #Skill\ List {
+        max-width: 100%;
+    }
+
+    #Skill\ List .category-column {
+        flex: 1 1 100%; /* Make columns full width on smaller screens */
+        margin: 10px 0;
+    }
+}
