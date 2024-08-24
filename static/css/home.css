@@ -1,0 +1,178 @@
+/* General reset */
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap');
+
+body {
+    font-family: 'Ubuntu', sans-serif;
+    background-color: #ffffff; /* Set the background to white */
+    color: #aa3953; /* Font color */
+    margin: 0;
+    font-weight: 500;
+    box-sizing: border-box;
+    min-height: 100vh; /* Ensure body takes up full height */
+    display: flex;
+    flex-direction: column; /* Stack header, content, and footer vertically */
+}
+
+/* New container for logo and profile icon */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.logo {
+    font-size: 48px;
+    font-weight: 700;
+    color: #aa3953;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.profile-icon {
+    margin-left: auto; /* Align profile icon to the right */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+nav {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-bottom: 1px solid #444;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #555;
+}
+
+/* Container for the tabs */
+.tab {
+    width: 100%; /* Ensure the tabs take full width */
+    display: flex; /* Use flexbox for tab buttons */
+    justify-content: space-between; /* Ensure equal spacing */
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent background */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow to the tabs */
+}
+
+/* Tab buttons */
+.tab button {
+    flex: 1; /* Equal width for each tab */
+    background-color: rgba(172, 215, 205, 0.8);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 0; /* Adjust padding to make sure the text is centered vertically */
+    transition: background-color 0.3s ease;
+    font-size: 17px;
+    text-align: center;
+}
+
+/* Hover effect for the tab buttons */
+.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Active tab button */
+.tab button.active {
+    background-color: #ccc;
+}
+
+/* Content under each tab */
+.tabcontent {
+    display: none;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-top: none;
+    background-color: rgba(255, 255, 255, 0.9); /* Match the tab background */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow to the content area */
+}
+
+#Home {
+    background-color: rgba(255, 255, 255, 0.7); /* White background with 70% opacity */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    z-index: 1; /* Ensure content is above the overlay */
+    margin: auto; /* Center horizontally */
+    margin-top: auto; /* Push downwards */
+    margin-bottom: auto; /* Push upwards */
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    /* This ensures the content area fills the space between the tabs and the footer */
+}
+
+h2 {
+    color: #aa3953; /* Font color */
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+p {
+    font-family: 'Ubuntu', sans-serif;
+    color: #aa3953; /* Font color */
+    font-weight: 500;
+}
+.bottom-image {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 25%; /* Adjust this to control the height of the image */
+    z-index: 0;
+}
+
+footer {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.5);
+}
+
+footer p {
+    margin: 0;
+    font-size: 14px;
+}
+
+

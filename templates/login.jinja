@@ -1,0 +1,26 @@
+{% extends "base.jinja" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <!-- Add the text logo at the top-left corner -->
+    <div class="logo">Swap</div>
+
+    <div class="content-box">
+        <h2>Login</h2>
+        <form action="{{ url_for('login_user') }}" method="post">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="submit" value="Login">
+        </form>
+        <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign up</a></p>
+    </div>
+
+    <!-- Add the image at the bottom-center -->
+    <img src="{{ url_for('static', filename='images/bg-cartoon.jpg') }}" alt="Cartoon Background" class="bottom-image">
+{% endblock %}
