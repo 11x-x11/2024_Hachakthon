@@ -5,8 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Profile</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+    <style>
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 15px;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            color: #333;
+        }
+        .back-button:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
 </head>
 <body>
+    <a href="{{ url_for('home') }}" class="back-button">← Back</a>
     <div class="profile-container">
         <div class="profile-sidebar">
             <div class="profile-image-section">
@@ -15,8 +34,6 @@
                 {% else %}
                     <p>No profile image uploaded</p>
                 {% endif %}
-                <!-- Custom label acting as the upload button -->
-
             </div>
             <div class="profile-details">
                 <h2>{{ user.username }}</h2>
