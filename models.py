@@ -30,6 +30,7 @@ class User(Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     profile_image = Column(LargeBinary, nullable=True)
+    bio = Column(Text, nullable=True)
 
     # Relationships
     friends = relationship(

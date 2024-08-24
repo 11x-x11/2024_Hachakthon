@@ -76,9 +76,11 @@ def signup_user():
 
 @app.route("/home")
 def home():
+    user = db.get_user(session['username'])
+    
     if 'username' not in session:
         return redirect(url_for('login'))
-    return render_template("home.jinja", username=session['username'])
+    return render_template("home.jinja", username=session['username'], user=user)
 
 @app.route("/logout")
 def logout():
@@ -91,12 +93,38 @@ def page_not_found(_):
     return render_template('404.jinja'), 404
 
 
-@app.route('/profile/<username>')
-def profile(username):
-    user = users.get(username)
-    if user is None:
-        return "User not found", 404
-    return render_template('profile.html', user=user)
+@app.route("/profile", methods=["GET", "POST"])
+def profile():
+    user = db.get_user(session['username'])
+    return render_template("profile.jinja", user=user)
+
+@app.route("/edit_profile", methods=["POST"])
+def edit_profile():
+    username = session['username']
+    email = request.form.get('email')
+    dob = request.form.get('dob')
+    location = request.form.get('location')
+    latitude = request.form.get('latitude')
+    longitude = request.form.get('longitude')
+    bio = request.form.get("bio")
+    profile_image = request.files.get('profile_image')
+
+    print(profile_image == None)
+    
+    db.update_user_profile(
+        username=username,
+        email=email,
+        dob=dob,
+        location=location,
+        latitude=float(latitude) if latitude else None,
+        longitude=float(longitude) if longitude else None,
+        bio=bio,
+        profile_image=profile_image,
+    )
+    
+    print("haha")
+    
+    return redirect(url_for('profile'))
 
 
 if __name__ == '__main__':
