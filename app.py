@@ -1,59 +1,93 @@
-"""
-app.py contains all of the server application
-this is where you'll find all of the GET/POST request handlers
-the socket event handlers are inside of socket_routes.py
-"""
-
-from flask import Flask, render_template, request, redirect, url_for, session, abort
+from flask import Flask, render_template, request, redirect, url_for, session, abort, flash
 from flask_socketio import SocketIO, emit
 import secrets
+from db import db, User, init_db
 
 app = Flask(__name__)
-
-# Secret key used to sign the session cookie
 app.config['SECRET_KEY'] = secrets.token_hex()
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 socketio = SocketIO(app)
+init_db(app)
 
-# Don't remove this!!
-import socket_routes  # Import socket event handlers
+import socket_routes
 
-# Index page
 @app.route("/")
 def index():
-    return render_template("index.jinja")
+    print("DEBUG: Accessing index page")
+    return redirect(url_for('login'))
 
-# Login page
 @app.route("/login")
 def login():
+    print("DEBUG: Accessing login page")
     return render_template("login.jinja")
 
-# Handles a POST request when the user clicks the log in button
 @app.route("/login/user", methods=["POST"])
 def login_user():
-    # Placeholder for handling login logic
-    pass
+    print("DEBUG: Processing login request")
+    username = request.form.get('username')
+    password = request.form.get('password')
+    print(f"DEBUG: Login attempt - Username: {username}")
+    
+    user = User.query.filter_by(username=username).first()
+    if user and user.check_password(password):
+        session['username'] = username
+        print("DEBUG: Login successful")
+        flash('Login successful!', 'success')
+        return redirect(url_for('home'))
+    else:
+        print("DEBUG: Login failed")
+        flash('Invalid username or password', 'error')
+        return redirect(url_for('login'))
 
-# Signup page
 @app.route("/signup")
 def signup():
+    print("DEBUG: Accessing signup page")
     return render_template("signup.jinja")
 
-# Handles a POST request when the user clicks the signup button
 @app.route("/signup/user", methods=["POST"])
 def signup_user():
-    # Placeholder for handling signup logic
-    pass
+    print("DEBUG: Processing signup request")
+    username = request.form.get('username')
+    password = request.form.get('password')
+    print(f"DEBUG: Signup attempt - Username: {username}")
+    
+    existing_user = User.query.filter_by(username=username).first()
+    if existing_user:
+        print("DEBUG: Signup failed - Username already exists")
+        flash('Username already exists', 'error')
+        return redirect(url_for('signup'))
+    else:
+        new_user = User(username=username)
+        new_user.set_password(password)
+        db.session.add(new_user)
+        db.session.commit()
+        session['username'] = username
+        print("DEBUG: Signup successful")
+        flash('Signup successful!', 'success')
+        return redirect(url_for('home'))
 
-# Home page
 @app.route("/home")
 def home():
-    # Placeholder for home page logic
-    pass
+    print("DEBUG: Accessing home page")
+    if 'username' not in session:
+        print("DEBUG: Unauthorized access to home page - redirecting to login")
+        return redirect(url_for('login'))
+    return render_template("home.jinja", username=session['username'])
 
-# Handler for 404 errors
+@app.route("/logout")
+def logout():
+    print("DEBUG: Processing logout request")
+    session.pop('username', None)
+    flash('You have been logged out successfully', 'info')
+    return redirect(url_for('index'))
+
 @app.errorhandler(404)
 def page_not_found(_):
+    print("DEBUG: 404 error occurred")
     return render_template('404.jinja'), 404
 
 if __name__ == '__main__':
-    socketio.run(app)
+    print("DEBUG: Starting the application")
+    socketio.run(app, debug=True)
