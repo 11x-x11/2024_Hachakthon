@@ -18,12 +18,13 @@
                 </a>
             {% else %}
                 <a href="{{ url_for('profile') }}">
-                    <img src="{{ url_for('static', filename='default_profile_icon.png') }}" alt="Profile Icon" 
+                    <img src="{{ url_for('static', filename='default_profile_icon.png') }}" alt="Profile Icon"
                          style="width: 50px; height: 50px; border-radius: 50%;">
                 </a>
             {% endif %}
         </div>
     </div>
+
     <!-- Navigation Tabs -->
     <div class="tab">
         <button class="tablinks" onclick="openTab(event, 'Home')" id="defaultOpen">HOME</button>
@@ -33,9 +34,8 @@
         <button class="tablinks" onclick="openTab(event, 'Friend List')">FRIENDS</button>
     </div>
 
-     <div class="main-content">
-        
-
+    <!-- Main Content -->
+    <div class="main-content">
         <div class="tabcontent" id="Home">
             <div class="content-box">
                 <h2>Welcome, {{ username }}!</h2>
@@ -45,50 +45,33 @@
         </div>
 
         <div class="tabcontent" id="Skill List">
-            <div class="skill-list-container">
-                {% for category in categories %}
-                    <div class="category-column">
-                        <h3>{{ category.name }}</h3>
-                        <ul>
-                            {% for skill in category.skills %}
-                                <li><a href="#" class="skill-link" data-skill-id="{{ skill.id }}">{{ skill.name }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    {% if loop.index % 5 == 0 %}
-                        </div><div class="skill-list-container">
-                    {% endif %}
-                {% endfor %}
-            </div>
+            <!-- Content for Skill List -->
         </div>
 
         <div class="tabcontent" id="Knowledge Repository">
-            <h2>Knowledge Repository</h2>
-            <p>Access your saved knowledge resources.</p>
+            <!-- Content for Knowledge Repository -->
         </div>
 
         <div class="tabcontent" id="Chat">
-            <h2>Chat</h2>
-            <p>Connect with your friends.</p>
+            <!-- Content for Chat -->
         </div>
-        
+
         <div class="tabcontent" id="Friend List">
-            <h2>Friend List</h2>
-            <p>Manage your friends.</p>
+            <!-- Content for Friend List -->
         </div>
     </div>
 
+    <!-- Guide Container -->
+    <div id="guide-container" style="display: none;">
+        <div id="guide-content">
+            <p id="guide-text"></p>
+            <button id="guide-next-btn">Next</button>
+        </div>
+    </div>
 
     <footer>
         <p>&copy; 2024 . All rights reserved.</p>
     </footer>
 
     <script src="{{ url_for('static', filename='js/home.js') }}" defer></script>
-    <!-- Add the image at the bottom-center -->
-    {# <img src="{{ url_for('static', filename='images/bg-cartoon.jpg') }}" alt="Cartoon Background" class="bottom-image"> #}
-
-    <div style="display: flex; align-items: center; justify-content: space-between;">
-
-</div>
-
 {% endblock %}
