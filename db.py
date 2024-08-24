@@ -6,9 +6,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 from sqlalchemy.sql import func
 import base64
-import binascii
-import pytz
-
 
 Path("database") \
     .mkdir(exist_ok=True)
