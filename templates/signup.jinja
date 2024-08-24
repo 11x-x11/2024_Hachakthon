@@ -1,0 +1,13 @@
+{% extends "base.jinja" %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+    <h2>Sign Up</h2>
+    <form action="{{ url_for('signup_user') }}" method="post">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="submit" value="Sign Up">
+    </form>
+    <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+{% endblock %}
