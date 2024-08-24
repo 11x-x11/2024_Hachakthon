@@ -150,7 +150,6 @@ footer p {
     font-size: 14px;
 }
 
-/********/
 /* Flex container for the image, welcome message, and people boxes */
 .content-box {
     display: flex;

@@ -2,11 +2,15 @@
 
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/knowledge.css') }}">
+
 {% endblock %}
 
 {% block title %}Home{% endblock %}
 
 {% block content %}
+
+
     <!-- Add the text logo at the top-left corner -->
     <div class="header-container">
         <div class="logo">Swap</div>
@@ -75,11 +79,62 @@
             {% endfor %}
         </div>
     </div>
-
-    <div class="tabcontent" id="Knowledge Repository">
+<div class="tabcontent" id="Knowledge Repository">
+    <section class="knowledge-repository">
         <h2>Knowledge Repository</h2>
-        <p>Access your saved knowledge resources.</p>
-    </div>
+        <div id="articles">
+            {% for article in articles %}
+                <div class="article" id="article_{{ article.id }}">
+                    <form method="POST" action="{{ url_for('modify_article', article_id=article.id) }}">
+                        <div class="flex-row">
+                            <input type="text" class="article-setting" name="title" value="{{ article.title }}" id="article_title_{{ article.id }}" readonly />
+                            <h4>by {{ article.author }} ({{ article.author_role }})</h4>
+                        </div>
+                        <textarea class="article-setting" name="content" id="article_content_{{ article.id }}" readonly>{{ article.content }}</textarea>
+                        <div class="flex-row">
+                            <button type="button" id="modify_button_{{ article.id }}" onclick="toggleEditMode('{{ article.id }}')" class="button margin-4">Modify</button>
+                            <button type="submit" id="save_button_{{ article.id }}" class="button margin-4" style="display: none;">Save</button>
+                        </div>
+                    </form>
+                    <form method="POST" action="{{ url_for('delete_article', article_id=article.id) }}">
+                        <button type="submit" class="button margin-4">Delete</button>
+                    </form>
+
+                    <div class="comments">
+                        <h4>Comments</h4>
+                        <ul id="comment_list_{{ article.id }}">
+                            {% for comment in article.comments %}
+                                <li id="comment_{{ comment.id }}">
+                                    {{ comment.author }} ({{ comment.author_role }}): {{ comment.content }}
+                                    <form method="POST" action="{{ url_for('delete_comment', comment_id=comment.id) }}">
+                                        <button type="submit" class="button">Delete</button>
+                                    </form>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <form method="POST" action="{{ url_for('add_comment', article_id=article.id) }}">
+                             <input type="hidden" name="username" value="{{ username }}">
+                            <input type="text" placeholder="Add a comment" name="content" class="input-box" id="make_comment_{{ article.id }}" required>
+                            <button type="submit" class="button">Add Comment</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div>
+            <form method="POST" action="{{ url_for('create_article') }}">
+                <input type="hidden" name="username" value="{{ username }}">
+                <input type="text" placeholder="Title" name="title" class="input-box" id="article_title" required>
+                <textarea name="content" id="make_article" placeholder="Content" rows="6" required></textarea>
+                <div class="flex-row-center">
+                    <button type="submit" class="btn primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+
 
     <div class="tabcontent" id="Chat">
         <h2>Chat</h2>
@@ -87,8 +142,20 @@
     </div>
     
     <div class="tabcontent" id="Friend List">
-        <h2>Friend List</h2>
-        <p>Manage your friends.</p>
+        <h3>Your Skills</h3>
+        <ul>
+            {% for skill in user.skills %}
+                <li>{{ skill.name }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Skills You're Interested In</h3>
+        <ul>
+            {% for skill in user.interested_skills %}
+                <li>{{ skill.name }}</li>
+            {% endfor %}
+        </ul>
+
     </div>
 </div>
 
@@ -96,5 +163,15 @@
         <p>&copy; 2024 . All rights reserved.</p>
     </footer>
 
+    <input type="hidden" id="currentUsername" value="{{ username }}">
+
+    <script>
+        var username = "{{ username }}";
+    </script>
+
+    <script src="/static/js/libs/socket.io.min.js"></script>
+
     <script src="{{ url_for('static', filename='js/home.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/knowledge.js') }}" defer></script>
+
 {% endblock %}

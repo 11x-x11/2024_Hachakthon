@@ -25,20 +25,27 @@ document.addEventListener('DOMContentLoaded', function() {
             const skillId = this.getAttribute('data-skill-id');
 
             fetch(`/find_matching_user_and_redirect?skill_id=${skillId}`)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (data.chatroom_url) {
                         window.location.href = data.chatroom_url; // Redirect to the chatroom
                     } else {
-                        alert('No matching users found.'); // Handle case where no match is found
+                        alert(data.error || 'No matching users found.'); // Handle case where no match is found
                     }
                 })
                 .catch(error => {
                     console.error('Error finding matching user:', error);
+                    alert('An error occurred while finding a matching user.');
                 });
         });
     });
 });
+
 
 function displayMatchingUsers(users) {
     const resultContainer = document.getElementById('matching-users-container');

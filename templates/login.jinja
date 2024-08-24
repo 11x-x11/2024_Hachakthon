@@ -9,6 +9,7 @@
 
 {% block content %}
     <!-- Add the text logo at the top-left corner -->
+    
     <div class="logo">Swap</div>
 
     <div class="content-box">
@@ -20,6 +21,8 @@
         </form>
         <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign up</a></p>
     </div>
+
+    <script> const socket = io(); </script>
 
     <!-- Add the image at the bottom-center -->
     <img src="{{ url_for('static', filename='images/bg-cartoon.jpg') }}" alt="Cartoon Background" class="bottom-image">

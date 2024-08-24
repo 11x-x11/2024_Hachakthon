@@ -54,23 +54,44 @@
                     <label for="bio">Short Bio:</label>
                     <textarea name="bio" id="bio" rows="5" readonly>{{ user.bio or '' }}</textarea>
                 </div>
+                <!-- Existing Skills Section -->
                 <div class="form-group">
-                    <label for="category">Category:</label>
-                    <select name="category" id="category" onchange="loadSubskills()" disabled>
+                    <label for="category">Category (Skills I Have):</label>
+                    <select name="category" id="category" onchange="loadSubskills('skills')" disabled>
                         <option value="">Select a category</option>
                         {% for category in categories %}
                             <option value="{{ category.id }}">{{ category.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
-
                 <div class="form-group">
-                    <label for="skills">Skills:</label>
+                    <label for="skills">Skills I Have:</label>
                     <select name="skills[]" id="skills" multiple disabled>
-                        <!-- This will be populated dynamically -->
-                        <option value="">Select skills</option>
+                        {% for skill in user.skills %}
+                            <option value="{{ skill.id }}" selected>{{ skill.name }}</option>
+                        {% endfor %}
                     </select>
                 </div>
+
+                <!-- Interested Skills Section -->
+                <div class="form-group">
+                    <label for="interested_category">Category (Skills I'm Interested In):</label>
+                    <select name="interested_category" id="interested_category" onchange="loadSubskills('interested_skills')" disabled>
+                        <option value="">Select a category</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="interested_skills">Skills I'm Interested In:</label>
+                    <select name="interested_skills[]" id="interested_skills" multiple disabled>
+                        {% for skill in user.interested_skills %}
+                            <option value="{{ skill.id }}" selected>{{ skill.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
                 <div class="form-group image-upload-group" style="display: none;">
                     <label for="profile_image" class="upload-label">Upload New Image:</label>
                     <input type="file" name="profile_image" id="profile_image" accept="image/*">

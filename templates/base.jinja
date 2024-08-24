@@ -97,5 +97,19 @@
         {% block content %}
         {% endblock %}
     </div>
+
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+
+    <script> 
+        const socket = io.connect('https://127.0.0.1:5000');
+
+        // Example of listening to an event from the server
+        socket.on('connect', () => {
+            console.log('Connected to the server via Socket.IO');
+        });
+        
+        // Example of emitting an event to the server
+        socket.emit('my_event', { data: 'Hello, Server!' });
+    </script>
 </body>
 </html>
