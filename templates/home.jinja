@@ -1,24 +1,65 @@
 {% extends "base.jinja" %}
 
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <div style="display: flex; align-items: center; justify-content: space-between;">
-        <h2>Welcome, {{ username }}!</h2>
-        <div>
-            {% if user.profile_image %}
-                <a href="{{ url_for('profile') }}">
-                    <img src="data:image/jpeg;base64,{{ user.profile_image.decode('utf-8') }}" alt="Profile Image"
-                         style="width: 50px; height: 50px; border-radius: 50%;">
-                </a>
-            {% else %}
-                <a href="{{ url_for('profile') }}">
-                    <img src="{{ url_for('static', filename='default_profile_icon.png') }}" alt="Profile Icon" 
-                         style="width: 50px; height: 50px; border-radius: 50%;">
-                </a>
-            {% endif %}
-        </div>
+<header>
+    <h1>My Website</h1>
+    <div>
+        {% if user.profile_image %}
+            <a href="{{ url_for('profile') }}">
+                <img src="data:image/jpeg;base64,{{ user.profile_image.decode('utf-8') }}" alt="Profile Image"
+                     style="width: 50px; height: 50px; border-radius: 50%;">
+            </a>
+        {% else %}
+            <a href="{{ url_for('profile') }}">
+                <img src="{{ url_for('static', filename='default_profile_icon.png') }}" alt="Profile Icon" 
+                     style="width: 50px; height: 50px; border-radius: 50%;">
+            </a>
+        {% endif %}
     </div>
+</header>
+
+<div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'Home')" id="defaultOpen">Home</button>
+    <button class="tablinks" onclick="openTab(event, 'Skill List')">Skill List</button>
+    <button class="tablinks" onclick="openTab(event, 'Knowledge Repository')">Knowledge Repository</button>
+    <button class="tablinks" onclick="openTab(event, 'Chat')">Chat</button>
+    <button class="tablinks" onclick="openTab(event, 'Friend List')">Friend List</button>
+</div>
+
+<div style="display: flex; align-items: center; justify-content: space-between;">
+    <h2>Welcome, {{ username }}!</h2>
+</div>
+
+<div class="tabcontent" id="Home">
     <p>This is your personal home page.</p>
     <a href="{{ url_for('logout') }}">Logout</a>
+</div>
+<div class="tabcontent" id="Skill List">
+    <h2>Skill List</h2>
+    <p>Here you can manage your skills.</p>
+</div>
+<div class="tabcontent" id="Knowledge Repository">
+    <h2>Knowledge Repository</h2>
+    <p>Access your saved knowledge resources.</p>
+</div>
+<div class="tabcontent" id="Chat">
+    <h2>Chat</h2>
+    <p>Connect with your friends.</p>
+</div>
+<div class="tabcontent" id="Friend List">
+    <h2>Friend List</h2>
+    <p>Manage your friends.</p>
+</div>
+
+<footer>
+    <p>&copy; 2024 . All rights reserved.</p>
+</footer>
+
+<script src="{{ url_for('static', filename='js/home.js') }}" defer></script>
 {% endblock %}

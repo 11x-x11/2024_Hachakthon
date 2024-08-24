@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Flask Auth App{% endblock %}</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .container { width: 100%; margin: 0; padding: 0; }
         .flash-messages { margin-bottom: 20px; }
         .flash-message { padding: 10px; margin-bottom: 10px; border-radius: 5px; }
         .flash-success { background-color: #d4edda; color: #155724; }
@@ -18,6 +18,8 @@
         input[type="submit"] { background-color: #007bff; color: white; border: none; padding: 10px 20px; cursor: pointer; }
         input[type="submit"]:hover { background-color: #0056b3; }
     </style>
+
+    {% block head %} {% endblock %}
 </head>
 <body>
     <div class="container">
