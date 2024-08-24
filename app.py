@@ -1,79 +1,86 @@
 from flask import Flask, render_template, request, redirect, url_for, session, abort, flash
 from flask_socketio import SocketIO, emit
 import secrets
-from db import db, User, init_db
+import db
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = secrets.token_hex()
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+app.config['SECRET_KEY'] = secrets.token_hex()
 socketio = SocketIO(app)
-init_db(app)
+app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_HTTPONLY'] = True 
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 import socket_routes
 
+@app.after_request
+def apply_csp(response):
+    response.headers["Content-Security-Policy"] = "frame-ancestors 'self'"
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    return response
+
+@app.before_request
+def before_request():
+    if not request.is_secure:
+        url = request.url.replace('http://', 'https://', 1)
+        code = 301
+        return redirect(url, code=code)
+
 @app.route("/")
 def index():
-    print("DEBUG: Accessing index page")
     return redirect(url_for('login'))
 
 @app.route("/login")
 def login():
-    print("DEBUG: Accessing login page")
     return render_template("login.jinja")
 
 @app.route("/login/user", methods=["POST"])
 def login_user():
-    print("DEBUG: Processing login request")
     username = request.form.get('username')
     password = request.form.get('password')
-    print(f"DEBUG: Login attempt - Username: {username}")
     
-    user = User.query.filter_by(username=username).first()
-    if user and user.check_password(password):
-        session['username'] = username
-        print("DEBUG: Login successful")
-        flash('Login successful!', 'success')
-        return redirect(url_for('home'))
-    else:
-        print("DEBUG: Login failed")
-        flash('Invalid username or password', 'error')
+    user = db.get_user(username)
+    if user is None:
+        flash("Error: User does not exist!")
         return redirect(url_for('login'))
+
+    if db.verify_password(user.password, password) is False:
+        flash("Error: Password does not match!")
+        return redirect(url_for('login'))
+    
+    session['username'] = username
+
+    return redirect(url_for('home'))
+    
 
 @app.route("/signup")
 def signup():
-    print("DEBUG: Accessing signup page")
     return render_template("signup.jinja")
 
 @app.route("/signup/user", methods=["POST"])
-def signup_user():
-    print("DEBUG: Processing signup request")
+def signup_user():   
     username = request.form.get('username')
     password = request.form.get('password')
-    print(f"DEBUG: Signup attempt - Username: {username}")
+
+    if type(username) != str:
+        flash("Error: Fail to create an account!")
     
-    existing_user = User.query.filter_by(username=username).first()
-    if existing_user:
-        print("DEBUG: Signup failed - Username already exists")
-        flash('Username already exists', 'error')
-        return redirect(url_for('signup'))
-    else:
-        new_user = User(username=username)
-        new_user.set_password(password)
-        db.session.add(new_user)
-        db.session.commit()
+    if db.get_user(username) is None:
+        db.insert_user(username, password)
         session['username'] = username
-        print("DEBUG: Signup successful")
         flash('Signup successful!', 'success')
         return redirect(url_for('home'))
+    else:
+        flash("Error: User already exists!")
+        return redirect(url_for('signup'))
 
 @app.route("/home")
 def home():
+    user = db.get_user(session['username'])
+    
     if 'username' not in session:
-        print("DEBUG: Unauthorized access to home page - redirecting to login")
         return redirect(url_for('login'))
-    return render_template("home.jinja", username=session['username'])
+    return render_template("home.jinja", username=session['username'], user=user)
 
 @app.route("/logout")
 def logout():
@@ -83,8 +90,42 @@ def logout():
 
 @app.errorhandler(404)
 def page_not_found(_):
-    print("DEBUG: 404 error occurred")
     return render_template('404.jinja'), 404
+
+
+@app.route("/profile", methods=["GET", "POST"])
+def profile():
+    user = db.get_user(session['username'])
+    return render_template("profile.jinja", user=user)
+
+@app.route("/edit_profile", methods=["POST"])
+def edit_profile():
+    username = session['username']
+    email = request.form.get('email')
+    dob = request.form.get('dob')
+    location = request.form.get('location')
+    latitude = request.form.get('latitude')
+    longitude = request.form.get('longitude')
+    bio = request.form.get("bio")
+    profile_image = request.files.get('profile_image')
+
+    print(profile_image == None)
+    
+    db.update_user_profile(
+        username=username,
+        email=email,
+        dob=dob,
+        location=location,
+        latitude=float(latitude) if latitude else None,
+        longitude=float(longitude) if longitude else None,
+        bio=bio,
+        profile_image=profile_image,
+    )
+    
+    print("haha")
+    
+    return redirect(url_for('profile'))
+
 
 if __name__ == '__main__':
     ssl_contexts = ('certificate/mydomain.crt', 'certificate/mydomain.key')

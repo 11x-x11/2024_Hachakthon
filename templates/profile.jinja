@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-sidebar">
+            <div class="profile-image-section">
+                {% if user.profile_image %}
+                    <img src="data:image/jpeg;base64,{{ user.profile_image.decode('utf-8') }}" alt="Profile Image" class="profile-image">
+                {% else %}
+                    <p>No profile image uploaded</p>
+                {% endif %}
+                <!-- Custom label acting as the upload button -->
+
+            </div>
+            <div class="profile-details">
+                <h2>{{ user.username }}</h2>
+                <p class="location">{{ user.location or 'Location not provided' }}</p>
+            </div>
+        </div>
+        <div class="profile-main">
+            <h1>Your Profile</h1>
+            <form method="POST" enctype="multipart/form-data" action="{{ url_for('edit_profile') }}">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" name="email" id="email" value="{{ user.email or '' }}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="dob">Date of Birth:</label>
+                    <input type="date" name="dob" id="dob" value="{{ user.dob.strftime('%Y-%m-%d') if user.dob else '' }}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="latitude">Latitude:</label>
+                    <input type="text" name="latitude" id="latitude" value="{{ user.latitude or '' }}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="longitude">Longitude:</label>
+                    <input type="text" name="longitude" id="longitude" value="{{ user.longitude or '' }}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="bio">Short Bio:</label>
+                    <textarea name="bio" id="bio" rows="5" readonly>{{ user.bio or '' }}</textarea>
+                </div>
+                <div class="form-group image-upload-group" style="display: none;">
+                    <label for="profile_image" class="upload-label">Upload New Image:</label>
+                    <input type="file" name="profile_image" id="profile_image" accept="image/*">
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="edit-button" id="edit-profile-button" onclick="toggleEditMode()">Edit Profile</button>
+                    <button type="submit" class="save-button" id="save-changes-button" style="display:none;">Save Changes</button>
+                    <button type="button" class="cancel-button" id="cancel-edit-button" style="display:none;" onclick="toggleEditMode(true)">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+</body>
+</html>
