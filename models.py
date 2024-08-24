@@ -12,12 +12,17 @@ friend_association = Table('friend_association', Base.metadata,
     Column('friend_id', String, ForeignKey('user.username'), primary_key=True)
 )
 
-# Association table for user skills
+# Updated association table for user skills without the `is_offering` column
 user_skills = Table('user_skills', Base.metadata,
     Column('user_id', String, ForeignKey('user.username'), primary_key=True),
     Column('skill_id', Integer, ForeignKey('skill.id'), primary_key=True),
-    Column('is_offering', Boolean, nullable=False)  # True if offering, False if seeking
 )
+
+chatroom_users = Table('chatroom_users', Base.metadata,
+    Column('chatroom_id', Integer, ForeignKey('chatroom.id'), primary_key=True),
+    Column('user_id', String, ForeignKey('user.username'), primary_key=True)
+)
+
 
 class User(Base):
     __tablename__ = "user"
@@ -26,9 +31,8 @@ class User(Base):
     password = Column(String, nullable=False)
     email = Column(String, nullable=True, unique=True)  # Make nullable initially
     dob = Column(DateTime, nullable=True)  # Make nullable initially
-    location = Column(String, nullable=True)
-    latitude = Column(Float, nullable=True)
-    longitude = Column(Float, nullable=True)
+    country = Column(String, nullable=True)  # Country field for user location
+    city = Column(String, nullable=True)  # City field for user location
     profile_image = Column(LargeBinary, nullable=True)
     bio = Column(Text, nullable=True)
 
@@ -46,16 +50,40 @@ class User(Base):
         secondary=user_skills, 
         back_populates='users'
     )
+    
+    # Add this relationship to fix the issue
+    chatrooms = relationship(
+        'Chatroom', 
+        secondary=chatroom_users, 
+        back_populates='users'
+    )
 
-# Skill model
+
+class SkillCategory(Base):
+    __tablename__ = "skill_category"
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String, unique=True, nullable=False)
+    
+    skills = relationship('Skill', back_populates='category')
+
 class Skill(Base):
     __tablename__ = "skill"
     
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String, unique=True, nullable=False)  # Skill name (e.g., "Python", "Dancing")
+    name = Column(String, unique=True, nullable=False) 
+    
+    category_id = Column(Integer, ForeignKey('skill_category.id'), nullable=False)
+    category = relationship('SkillCategory', back_populates='skills')
     
     users = relationship(
         'User', 
         secondary=user_skills, 
         back_populates='skills'
     )
+
+class Chatroom(Base):
+    __tablename__ = 'chatroom'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    users = relationship('User', secondary='chatroom_users', back_populates='chatrooms')
