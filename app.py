@@ -7,6 +7,7 @@ the socket event handlers are inside of socket_routes.py
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from flask_socketio import SocketIO, emit
 import secrets
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
@@ -54,6 +55,15 @@ def home():
 @app.errorhandler(404)
 def page_not_found(_):
     return render_template('404.jinja'), 404
+
+
+@app.route('/profile/<username>')
+def profile(username):
+    user = users.get(username)
+    if user is None:
+        return "User not found", 404
+    return render_template('profile.html', user=user)
+
 
 if __name__ == '__main__':
     socketio.run(app)
