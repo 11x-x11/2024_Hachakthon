@@ -5,11 +5,7 @@ from models import *
 from datetime import datetime, timezone
 from pathlib import Path
 from sqlalchemy.sql import func
-<<<<<<< HEAD
-
-=======
 import base64
->>>>>>> 1c1ca7f5a52dcbf5ec7192d8134d7dd628c2cf2f
 
 Path("database") \
     .mkdir(exist_ok=True)
