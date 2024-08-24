@@ -3,7 +3,22 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <h2>Welcome, {{ username }}!</h2>
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+        <h2>Welcome, {{ username }}!</h2>
+        <div>
+            {% if user.profile_image %}
+                <a href="{{ url_for('profile') }}">
+                    <img src="data:image/jpeg;base64,{{ user.profile_image.decode('utf-8') }}" alt="Profile Image"
+                         style="width: 50px; height: 50px; border-radius: 50%;">
+                </a>
+            {% else %}
+                <a href="{{ url_for('profile') }}">
+                    <img src="{{ url_for('static', filename='default_profile_icon.png') }}" alt="Profile Icon" 
+                         style="width: 50px; height: 50px; border-radius: 50%;">
+                </a>
+            {% endif %}
+        </div>
+    </div>
     <p>This is your personal home page.</p>
     <a href="{{ url_for('logout') }}">Logout</a>
 {% endblock %}
