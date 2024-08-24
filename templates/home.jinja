@@ -45,27 +45,8 @@
                 <h2>Welcome, {{ username }}!</h2>
                 <p>Connect with these potential skill exchange partners:</p>
             </div>
-        </div>
 
-        <div class="tabcontent" id="Skill List">
-            <div class="skill-list-container">
-                {% for category in categories %}
-                    <div class="category-column">
-                        <h3>{{ category.name }}</h3>
-                        <ul>
-                            {% for skill in category.skills %}
-                                <li><a href="#" class="skill-link" data-skill-id="{{ skill.id }}">{{ skill.name }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    {% if loop.index % 5 == 0 %}
-                        </div><div class="skill-list-container">
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-
-            <!-- Right section with the recommended people boxes -->
+                    <!-- Right section with the recommended people boxes -->
             <div class="right-section">
                 <div class="people-grid">
                     <div class="person-box">Person 1</div>
@@ -76,8 +57,40 @@
             </div>
         </div>
     </div>
-</div>
 
+    <div class="tabcontent" id="Skill List">
+        <div class="skill-list-container">
+            {% for category in categories %}
+                <div class="category-column">
+                    <h3>{{ category.name }}</h3>
+                    <ul>
+                        {% for skill in category.skills %}
+                            <li><a href="#" class="skill-link" data-skill-id="{{ skill.id }}">{{ skill.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% if loop.index % 5 == 0 %}
+                    </div><div class="skill-list-container">
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="tabcontent" id="Knowledge Repository">
+        <h2>Knowledge Repository</h2>
+        <p>Access your saved knowledge resources.</p>
+    </div>
+
+    <div class="tabcontent" id="Chat">
+        <h2>Chat</h2>
+        <p>Connect with your friends.</p>
+    </div>
+    
+    <div class="tabcontent" id="Friend List">
+        <h2>Friend List</h2>
+        <p>Manage your friends.</p>
+    </div>
+</div>
 
     <footer>
         <p>&copy; 2024 . All rights reserved.</p>
