@@ -2,7 +2,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 from models import *
-import bcrypt
 from datetime import datetime, timezone
 from pathlib import Path
 from sqlalchemy.sql import func
@@ -40,17 +39,21 @@ def verify_password(stored_password, provided_password):
     return provided_password == stored_password
 
 # Update user profile
-def update_user_profile(username: str, email: str, dob: str, location: str, latitude: float, longitude: float, profile_image: bytes = None):
+def update_user_profile(username: str, email: str, dob: str, location: str, latitude: float, longitude: float, bio: str, profile_image: bytes = None):
     with Session(engine) as session:
         user = session.query(User).filter_by(username=username).first()
+        print(user)
         if user:
             user.email = email
             user.dob = datetime.strptime(dob, "%Y-%m-%d")
             user.location = location
             user.latitude = latitude
             user.longitude = longitude
+            user.bio = bio
+            
             if profile_image:
-                user.profile_image = profile_image
+                 user.profile_image = base64.b64encode(profile_image.read())
+                 
             session.commit()
 
 def is_profile_complete(user: User):
