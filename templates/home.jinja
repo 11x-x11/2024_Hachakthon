@@ -45,8 +45,21 @@
         </div>
 
         <div class="tabcontent" id="Skill List">
-            <h2>Skill List</h2>
-            <p>Here you can manage your skills.</p>
+            <div class="skill-list-container">
+                {% for category in categories %}
+                    <div class="category-column">
+                        <h3>{{ category.name }}</h3>
+                        <ul>
+                            {% for skill in category.skills %}
+                                <li><a href="#" class="skill-link" data-skill-id="{{ skill.id }}">{{ skill.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% if loop.index % 5 == 0 %}
+                        </div><div class="skill-list-container">
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
 
         <div class="tabcontent" id="Knowledge Repository">
