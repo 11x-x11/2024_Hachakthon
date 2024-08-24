@@ -70,7 +70,6 @@ def signup_user():
 
 @app.route("/home")
 def home():
-    print("DEBUG: Accessing home page")
     if 'username' not in session:
         print("DEBUG: Unauthorized access to home page - redirecting to login")
         return redirect(url_for('login'))
@@ -78,7 +77,6 @@ def home():
 
 @app.route("/logout")
 def logout():
-    print("DEBUG: Processing logout request")
     session.pop('username', None)
     flash('You have been logged out successfully', 'info')
     return redirect(url_for('index'))
@@ -89,5 +87,5 @@ def page_not_found(_):
     return render_template('404.jinja'), 404
 
 if __name__ == '__main__':
-    print("DEBUG: Starting the application")
-    socketio.run(app, debug=True)
+    ssl_contexts = ('certificate/mydomain.crt', 'certificate/mydomain.key')
+    socketio.run(app, ssl_context=ssl_contexts)
