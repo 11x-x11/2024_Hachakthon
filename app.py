@@ -90,6 +90,15 @@ def logout():
 def page_not_found(_):
     return render_template('404.jinja'), 404
 
+
+@app.route('/profile/<username>')
+def profile(username):
+    user = users.get(username)
+    if user is None:
+        return "User not found", 404
+    return render_template('profile.html', user=user)
+
+
 if __name__ == '__main__':
     ssl_contexts = ('certificate/mydomain.crt', 'certificate/mydomain.key')
     socketio.run(app, ssl_context=ssl_contexts)
