@@ -55,6 +55,21 @@
         .flash-message .close-btn:hover {
             color: #000;
         }
+
+        .closebtn {
+            margin-left: 15px;
+            color: black;
+            font-weight: bold;
+            float: right;
+            font-size: 20px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .closebtn:hover {
+            color: red;
+        }
         
         form { background-color: #f9f9f9; padding: 20px; border-radius: 5px; }
         input[type="text"], input[type="password"] { width: 100%; padding: 10px; margin-bottom: 10px; }
@@ -70,7 +85,10 @@
             {% if messages %}
                 <div class="flash-messages">
                     {% for category, message in messages %}
-                        <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                        <div class="flash-message flash-{{ category }}">
+                            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                            {{ message }}
+                        </div>
                     {% endfor %}
                 </div>
             {% endif %}

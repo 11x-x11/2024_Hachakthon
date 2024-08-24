@@ -26,23 +26,22 @@
     </div>
     <!-- Navigation Tabs -->
     <div class="tab">
-        <button class="tablinks" onclick="openTab(event, 'Home')" id="defaultOpen">Home</button>
-        <button class="tablinks" onclick="openTab(event, 'Skill List')">Skill List</button>
-        <button class="tablinks" onclick="openTab(event, 'Knowledge Repository')">Knowledge Repository</button>
-        <button class="tablinks" onclick="openTab(event, 'Chat')">Chat</button>
-        <button class="tablinks" onclick="openTab(event, 'Friend List')">Friend List</button>
+        <button class="tablinks" onclick="openTab(event, 'Home')" id="defaultOpen">HOME</button>
+        <button class="tablinks" onclick="openTab(event, 'Skill List')">SKILLS</button>
+        <button class="tablinks" onclick="openTab(event, 'Knowledge Repository')">Knowledge Repo</button>
+        <button class="tablinks" onclick="openTab(event, 'Chat')">CHAT</button>
+        <button class="tablinks" onclick="openTab(event, 'Friend List')">FRIENDS</button>
     </div>
 
      <div class="main-content">
-        <div class="content-box">
-            <h2>Welcome, {{ username }}!</h2>
-            <p>This is your personal home page.</p>
-            <a href="{{ url_for('logout') }}">Logout</a>
-        </div>
+        
 
         <div class="tabcontent" id="Home">
-            <p>This is your personal home page.</p>
-            <a href="{{ url_for('logout') }}">Logout</a>
+            <div class="content-box">
+                <h2>Welcome, {{ username }}!</h2>
+                <p>This is your personal home page.</p>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
         </div>
 
         <div class="tabcontent" id="Skill List">

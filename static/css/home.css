@@ -111,19 +111,7 @@ nav ul li a:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow to the content area */
 }
 
-
-.main-content {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    box-sizing: border-box;
-    /* This ensures the content area fills the space between the tabs and the footer */
-}
-
-/* Adjusted content box styling for vertical centering */
-.content-box {
+#Home {
     background-color: rgba(255, 255, 255, 0.7); /* White background with 70% opacity */
     padding: 30px;
     border-radius: 10px;
@@ -136,6 +124,16 @@ nav ul li a:hover {
     margin: auto; /* Center horizontally */
     margin-top: auto; /* Push downwards */
     margin-bottom: auto; /* Push upwards */
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    /* This ensures the content area fills the space between the tabs and the footer */
 }
 
 h2 {
