@@ -389,3 +389,52 @@ footer p {
         margin: 10px 0;
     }
 }
+
+/* Guide container styling */
+#guide-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Shadow for the background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it is above all other content */
+}
+
+#guide-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+#guide-text {
+    margin-bottom: 20px;
+    font-family: 'Ubuntu', sans-serif;
+    color: #aa3953;
+}
+
+#guide-next-btn {
+    background-color: #aa3953;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+#guide-next-btn:hover {
+    background-color: #c74a6e;
+}
+
+/* Highlight for the current tab being introduced */
+.tablinks.highlight {
+    box-shadow: 0 0 15px 5px #aa3953;
+    z-index: 1001;
+}

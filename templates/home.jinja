@@ -29,12 +29,13 @@
                 </a>
             {% else %}
                 <a href="{{ url_for('profile') }}">
-                    <img src="{{ url_for('static', filename='default_profile_icon.png') }}" alt="Profile Icon" 
+                    <img src="{{ url_for('static', filename='default_profile_icon.png') }}" alt="Profile Icon"
                          style="width: 50px; height: 50px; border-radius: 50%;">
                 </a>
             {% endif %}
         </div>
     </div>
+    
     </div>
     <!-- Navigation Tabs -->
     <div class="tab">
@@ -195,7 +196,7 @@
                     </table>
                 </div>
             </div>
-
+            
         <!-- Friend Requests and Add Friends on the right -->
             <div class="friend-requests-section">
                 <div class="container">
@@ -230,6 +231,14 @@
         <p>&copy; 2024 . All rights reserved.</p>
     </footer>
 
+    <!-- Guide Container -->
+    <div id="guide-container" style="display: none;">
+        <div id="guide-content">
+            <p id="guide-text"></p>
+            <button id="guide-next-btn">Next</button>
+        </div>
+    </div>
+    
     <input type="hidden" id="currentUsername" value="{{ username }}">
 
     <script>
@@ -242,6 +251,5 @@
     <script src="{{ url_for('static', filename='js/knowledge.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/chat.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/friend.js') }}" defer></script>
-
 
 {% endblock %}

@@ -58,3 +58,67 @@ function displayMatchingUsers(users) {
         resultContainer.textContent = 'No matching users found.';
     }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    let currentStep = 0;
+
+    const steps = [
+        {
+            element: document.getElementById('defaultOpen'),
+            text: 'This is the Home tab. Here you can view your personal home page.'
+        },
+        {
+            element: document.querySelector(".tab button:nth-child(2)"),
+            text: 'This is the Skills tab. Here you can view and manage your skills.'
+        },
+        {
+            element: document.querySelector(".tab button:nth-child(3)"),
+            text: 'This is the Knowledge Repository tab. Here you can access your saved knowledge resources.'
+        },
+        {
+            element: document.querySelector(".tab button:nth-child(4)"),
+            text: 'This is the Chat tab. Here you can connect with your friends.'
+        },
+        {
+            element: document.querySelector(".tab button:nth-child(5)"),
+            text: 'This is the Friends tab. Here you can manage your friends.'
+        }
+    ];
+
+    const guideContainer = document.getElementById('guide-container');
+    const guideText = document.getElementById('guide-text');
+    const guideNextBtn = document.getElementById('guide-next-btn');
+
+    function startGuide() {
+        guideContainer.style.display = 'flex';
+        showStep(currentStep);
+    }
+
+    function showStep(stepIndex) {
+        if (stepIndex < steps.length) {
+            const step = steps[stepIndex];
+            guideText.textContent = step.text;
+            highlightElement(step.element);
+        } else {
+            endGuide();
+        }
+    }
+
+    function highlightElement(element) {
+        steps.forEach(step => step.element.classList.remove('highlight'));
+        element.classList.add('highlight');
+    }
+
+    function endGuide() {
+        guideContainer.style.display = 'none';
+        steps.forEach(step => step.element.classList.remove('highlight'));
+    }
+
+    guideNextBtn.addEventListener('click', function() {
+        currentStep++;
+        showStep(currentStep);
+    });
+
+    // Start the guide on page load
+    startGuide();
+});
