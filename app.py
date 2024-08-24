@@ -129,4 +129,5 @@ def edit_profile():
 
 if __name__ == '__main__':
     ssl_contexts = ('certificate/mydomain.crt', 'certificate/mydomain.key')
-    socketio.run(app, ssl_context=ssl_contexts)
+    # socketio.run(app, ssl_context=ssl_contexts)
+    socketio.run(app, ssl_context=ssl_contexts, debug=True)
