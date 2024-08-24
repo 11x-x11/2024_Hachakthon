@@ -1,0 +1,187 @@
+/* General styles for the page */
+#Friend\ List body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+/* Styles specific to the Friend List tab */
+#Friend\ List .container {
+    display: flex;
+    max-width: 1200px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#Friend\ List h1, #FriendList h2 {
+    color: #333;
+}
+
+#Friend\ List .friend-section {
+    flex: 1;
+    margin-right: 20px;
+}
+
+#Friend\ List #friend_requests {
+    margin-top: 20px;
+}
+
+#Friend\ List .friend-requests-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#Friend\ List #friend_requests_list {
+    list-style: none;
+    padding: 0;
+}
+
+/* Friend Requests Styles */
+#Friend\ List #friend_requests {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    background: #f9f9f9;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+#Friend\ List #friend_requests h2 {
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#Friend\ List #friend_requests ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#Friend\ List #friend_requests li {
+    padding: 8px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#Friend\ List #friend_requests li:last-child {
+    border-bottom: none;
+}
+
+#Friend\ List #friend_requests button {
+    padding: 6px 12px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+#Friend\ List #friend_requests button:hover {
+    background-color: #45a049;
+}
+
+#Friend\ List #friend_requests button.decline {
+    background-color: #f44336;
+}
+
+#Friend\ List #friend_requests button.decline:hover {
+    background-color: #d32f2f;
+}
+
+#Friend\ List #friend_requests p {
+    color: #666;
+    font-style: italic;
+}
+
+/* Add Friends Styles */
+#Friend\ List #add_friends {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#Friend\ List .input-box {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+#Friend\ List .button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #333;
+    color: white;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+#Friend\ List .button:hover {
+    background-color: #555;
+}
+
+#Friend\ List #friend-list-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+    background: #f9f9f9;
+}
+
+#Friend\ List #friend-list-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#Friend\ List #friend-list-table th,
+#Friend\ List #friend-list-table td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+#Friend\ List #friend-list-table th {
+    background-color: #f2f2f2;
+}
+
+#Friend\ List #friend-list-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#Friend\ List .status {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 14px;
+}
+
+#Friend\ List .remove-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#Friend\ List .remove-button:hover {
+    background-color: darkred;
+}

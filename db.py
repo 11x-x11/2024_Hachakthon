@@ -153,27 +153,6 @@ def find_users_by_skill_and_want(skill_id, current_user):
 
         return matching_users
 
-def find_matching_user(skill_id, current_user):
-    with Session(engine) as session:
-        # Find users who want to learn the skill with skill_id
-        interested_users = session.query(User).join(user_skills).filter(
-            user_skills.c.skill_id == skill_id,
-            User.username != current_user.username
-        ).all()
-
-        # Filter users who have the skills that the current user wants
-        matching_users = []
-        for user in interested_users:
-            for skill in current_user.skills:
-                if skill in user.skills:
-                    matching_users.append(user)
-                    break
-
-        if matching_users:
-            # Randomly select a user from the list of matching users
-            return random.choice(matching_users)
-
-        return None
 
 def create_chatroom_for_users(user1, user2):
     with Session(engine) as session:
@@ -289,27 +268,28 @@ def get_all_articles():
         articles = session.query(Article).options(joinedload(Article.comments)).all()
         return [article.to_dict() for article in articles]
         
-def find_matching_user(skill_id, current_user):
+def find_matching_user(interested_skill_id, current_user):
     with Session(engine) as session:
-        # Find users who want to learn the skill with skill_id
-        interested_users = session.query(User).join(user_skills).filter(
-            user_skills.c.skill_id == skill_id,
+        # Step 1: Load the interested skill by ID to ensure we're working with the same instance
+        interested_skill = session.query(Skill).get(interested_skill_id)
+        
+        # Step 2: Find users who possess the interested skill
+        potential_matches = session.query(User).join(user_skills).filter(
+            user_skills.c.skill_id == interested_skill.id,
             User.username != current_user.username
         ).all()
-
-        # Filter users who have the skills that the current user wants
-        matching_users = []
-        for user in interested_users:
-            for skill in current_user.skills:
-                if skill in user.skills:
-                    matching_users.append(user)
-                    break
-
-        if matching_users:
-            # Randomly select a user from the list of matching users
-            return random.choice(matching_users)
-
+        
+        if potential_matches != None:
+            return potential_matches[0]
+        
         return None
+
+        # # Step 3: Check if any of the potential matches are interested in a skill the current user has
+        # for user in potential_matches:
+        #     for skill in current_user.skills:
+        #         # Ensure the skill is loaded within the current session
+
+
 
 def create_chatroom_for_users(user1, user2):
     with Session(engine) as session:
@@ -331,6 +311,149 @@ def create_chatroom_for_users(user1, user2):
 def get_chatroom(chatroom_id):
     with Session(engine) as session:
         return session.query(Chatroom).filter_by(id=chatroom_id).first()
+
+def get_user_role_in_chatroom(user, chatroom):
+    with Session(engine) as session:
+        cu = session.query(ChatroomUser).filter_by(user_id=user.username, chatroom_id=chatroom.id).first()
+        return cu.is_initiator if cu else False
+
+
+def add_friend(user_username, friend_username):
+    session = db_session()
+    try:
+        user = session.query(User).filter_by(username=user_username).first()
+        friend = session.query(User).filter_by(username=friend_username).first()
+
+        if user and friend:
+            if friend not in user.friends:
+                user.friends.append(friend)
+                friend.friends.append(user)  
+                session.commit()
+                return 0
+            return 1  # They are already friends
+        return -1  # One of the users does not exist
+    except Exception as e:
+        session.rollback()
+        print(f"Error adding friend: {e}")
+        return False
+    finally:
+        session.close()
+
+
+def get_friend_list(username):
+    with db_session() as session:
+        friends = session.query(User).join(friend_association, User.username == friend_association.c.friend_id)\
+                                     .filter(friend_association.c.user_id == username).all()
+        return friends
+
+
+def create_friend_request(sender_username, receiver_username):
+    session = db_session()
+    try:
+        sender_obj = get_user_by_username(sender_username)
+        receiver_obj = get_user_by_username(receiver_username)
+        
+        if not sender_obj or not receiver_obj:
+            return [-1]
+        
+        existing_request = session.query(FriendRequest).filter_by(
+            sender_username=sender_username,
+            receiver_username=receiver_username,
+            accepted=None
+        ).first()
+
+        if existing_request:
+            return [1]
+        
+        if receiver_obj.status == 'offline':
+            return [0, None, False]
+
+        new_request = FriendRequest(
+            sender_username=sender_username,
+            receiver_username=receiver_username
+        )
+        session.add(new_request)
+        session.commit()
+        return [0, new_request.request_id, True]
+    except Exception as e:
+        session.rollback()
+        print(f"Error creating friend request: {e}")
+        return [-2]  # Error during the
+
+def accept_friend_request_with_details(request_id):
+    session = db_session()  # Using scoped session
+    try:
+        # Use joinedload to fetch related user entities in the same query
+        request = session.query(FriendRequest).options(
+            joinedload(FriendRequest.sender),
+            joinedload(FriendRequest.receiver)
+        ).get(request_id)
+
+        if request and request.accepted is None:
+            # Mark the friend request as accepted
+            request.resolve(True)
+            
+            # Retrieve usernames from the friend request
+            sender_username = request.sender.username
+            receiver_username = request.receiver.username
+
+            # Use the existing add_friend function to add each other as friends
+            result = add_friend(sender_username, receiver_username)
+
+            if result == 0:
+                session.commit()
+                return {
+                    "success": True,
+                    "sender_name": sender_username,
+                    "receiver_name": receiver_username,
+                    "sender_status": get_user_status(sender_username),
+                    "receiver_status": get_user_status(receiver_username),
+                    "sender_role": get_user_role(sender_username),
+                    "receiver_role": get_user_role(receiver_username)
+                }
+            else:
+                # Handle cases where add_friend does not succeed as expected
+                session.rollback()
+                return {"success": False, "message": "Failed to add friend"}
+
+        return {"success": False, "message": "Request not pending or does not exist"}
+    except Exception as e:
+        session.rollback()
+        print(f"Error accepting friend request: {e}")
+        return {"success": False, "message": "Error during processing"}
+    finally:
+        session.close()
+
+
+def decline_friend_request(request_id):
+    session = db_session()
+    try:
+        request = session.query(FriendRequest).get(request_id)
+        if request and request.accepted is None:
+            request.resolve(False)
+            session.commit()
+            return True
+        return False
+    finally:
+        session.close()
+        
+def get_friend_requests(receiver_username):
+    session = db_session()
+    try:
+        friend_requests = session.query(FriendRequest).filter(
+            FriendRequest.receiver_username == receiver_username,
+            FriendRequest.accepted == None
+        ).all()
+        return friend_requests
+    except Exception as e:
+        print(f"Error retrieving friend requests: {e}")
+        return []
+    finally:
+        session.close()
+
+def get_user_by_username(username):
+    with db_session() as session:
+        return session.query(User).filter_by(username=username).first()
 
 
 populate_initial_skills()

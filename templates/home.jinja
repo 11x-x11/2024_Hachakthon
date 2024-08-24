@@ -3,6 +3,10 @@
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/knowledge.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/friend.css') }}">
+
+
 
 {% endblock %}
 
@@ -13,7 +17,10 @@
 
     <!-- Add the text logo at the top-left corner -->
     <div class="header-container">
-        <div class="logo">Swap</div>
+        <div class="logo">SkillSync</div>
+        
+        <div class="header-right">
+        <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
         <div class="profile-icon">
             {% if user.profile_image %}
                 <a href="{{ url_for('profile') }}">
@@ -27,6 +34,7 @@
                 </a>
             {% endif %}
         </div>
+    </div>
     </div>
     <!-- Navigation Tabs -->
     <div class="tab">
@@ -53,10 +61,22 @@
                     <!-- Right section with the recommended people boxes -->
             <div class="right-section">
                 <div class="people-grid">
-                    <div class="person-box">Person 1</div>
-                    <div class="person-box">Person 2</div>
-                    <div class="person-box">Person 3</div>
-                    <div class="person-box">Person 4</div>
+                    <div class="person-box">
+                        <img src="{{ url_for('static', filename='images/person1.jpeg') }}" alt="Person 1" class="person-image">
+                        <p class="person-description">Expert in Python and Machine Learning</p>
+                    </div>
+                    <div class="person-box">
+                        <img src="{{ url_for('static', filename='images/person2.jpeg') }}" alt="Person 2" class="person-image">
+                        <p class="person-description">Specialist in Web Development and JavaScript</p>
+                    </div>
+                    <div class="person-box">
+                        <img src="{{ url_for('static', filename='images/person3.jpeg') }}" alt="Person 3" class="person-image">
+                        <p class="person-description">Data Analysis and Visualization Expert</p>
+                    </div>
+                    <div class="person-box">
+                        <img src="{{ url_for('static', filename='images/person4.jpeg') }}" alt="Person 4" class="person-image">
+                        <p class="person-description">Proficient in Java and Android Development</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -137,25 +157,72 @@
 
 
     <div class="tabcontent" id="Chat">
-        <h2>Chat</h2>
-        <p>Connect with your friends.</p>
+        <div class="video-container">
+            <video id="localVideo" autoplay muted></video>
+            <video id="remoteVideo" autoplay></video>
+        </div>
+        <button onclick="startVideoChat()">Start Video Chat</button>
+        <button onclick="stopVideoChat()">Stop Video Chat</button>
+
+         <div id="textChat" class="text-chat hidden">
+            <div id="chatWindow">
+                <!-- Chat messages will go here -->
+            </div>
+            <input type="text" id="chatInput" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
     </div>
     
     <div class="tabcontent" id="Friend List">
-        <h3>Your Skills</h3>
-        <ul>
-            {% for skill in user.skills %}
-                <li>{{ skill.name }}</li>
-            {% endfor %}
-        </ul>
+        <div class="container">
+            <div class="friend-section">
+                <div id="friend-list-container">
+                    <table id="friend-list-table">
+                        <thead>
+                            <tr>
+                                <th>Friend's Username</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for friend in friends %}
+                            <tr id="friend_{{ friend.username }}">
+                                <td><span class="clickable_name" username="{{ friend.username }}">{{ friend.username }}</span></td>
+                                <td><button onclick="removeFriend('{{ friend.username }}')" class="remove-button">Remove</button></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-        <h3>Skills You're Interested In</h3>
-        <ul>
-            {% for skill in user.interested_skills %}
-                <li>{{ skill.name }}</li>
-            {% endfor %}
-        </ul>
+        <!-- Friend Requests and Add Friends on the right -->
+            <div class="friend-requests-section">
+                <div class="container">
+                <section id="friend_requests">
+                    <h2>Incoming Friend Requests</h2>
+                    <ul id="friend_requests_list">
+                        {% if friend_requests %}
+                            {% for request in friend_requests %}
+                                <li id="request_{{ request.id }}">
+                                    {{ request.sender_username }} wants to be your friend
+                                    <button onclick="acceptFriendRequest('{{ request.id }}')" class="button">Accept</button>
+                                    <button onclick="declineFriendRequest('{{ request.id }}')" class="button decline">Decline</button>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li id="no_requests">No incoming friend requests.</li>
+                        {% endif %}
+                    </ul>
+                </section>
 
+                <section id="add_friends">
+                    <p class="text">Add Friend:</p>
+                    <input type="text" id="friendUsername" placeholder="Enter friend's username" class="input-box">
+                    <button onclick="sendFriendRequest()" class="button">Add Friend</button>
+                </section>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -173,5 +240,8 @@
 
     <script src="{{ url_for('static', filename='js/home.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/knowledge.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/chat.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/friend.js') }}" defer></script>
+
 
 {% endblock %}

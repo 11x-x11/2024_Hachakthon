@@ -21,6 +21,28 @@ body {
     padding: 20px;
 }
 
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.logout-button {
+    margin-right: 20px;
+    padding: 10px 15px;
+    background-color: #aa3953;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+    background-color: #d32f2f;
+}
+
 .logo {
     font-size: 48px;
     font-weight: 700;
@@ -197,6 +219,16 @@ footer p {
     width: 100%;
     max-width: 400px; /* Control the width of the grid */
     margin: auto; /* Center the grid within the right section */
+    
+}
+
+.person-image {
+    width: 150px; /* Ensure width and height are the same */
+    height: 150px; /* Ensure width and height are the same */
+    display: block;
+    object-fit: cover;
+    border-radius: 50%; /* Makes the image a circle */
+    margin: 0 auto; /* Center the image */
 }
 
 /* Each person's box */
@@ -207,11 +239,18 @@ footer p {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
     width: 150px; /* Set a fixed width */
-    height: 150px; /* Set the height equal to the width to make it square */
-    display: flex;
+    height: 200px; /* Set the height equal to the width to make it square */
+    display: block;
     align-items: center;
     justify-content: center;
     font-size: 18px; /* Adjust font size as needed */
+    margin-bottom: 20px;
+}
+
+.person-description {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555; /* Subtle color for the description */
 }
 
 /* Skill List styling */
