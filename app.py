@@ -82,10 +82,9 @@ def signup_user():
 @app.route("/home")
 def home():
     user = db.get_user(session['username'])
-    
     if 'username' not in session:
         return redirect(url_for('login'))
-    
+
     categories = db.get_all_categories()
     return render_template("home.jinja", username=session['username'], user=user, categories=categories)
 

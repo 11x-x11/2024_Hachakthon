@@ -28,19 +28,22 @@
     <div class="tab">
         <button class="tablinks" onclick="openTab(event, 'Home')" id="defaultOpen">HOME</button>
         <button class="tablinks" onclick="openTab(event, 'Skill List')">SKILLS</button>
-        <button class="tablinks" onclick="openTab(event, 'Knowledge Repository')">Knowledge Repo</button>
+        <button class="tablinks" onclick="openTab(event, 'Knowledge Repository')">KNOWLEDGE</button>
         <button class="tablinks" onclick="openTab(event, 'Chat')">CHAT</button>
         <button class="tablinks" onclick="openTab(event, 'Friend List')">FRIENDS</button>
     </div>
 
-     <div class="main-content">
-        
+<div class="main-content">
+    <div class="tabcontent" id="Home">
+        <div class="content-box">
+            <!-- Left section with the image and welcome message -->
+            <div class="left-section">
+                <!-- Display the homepage image -->
+                <img src="{{ url_for('static', filename='images/homepage.png') }}" alt="Home Image" class="homepage-image">
 
-        <div class="tabcontent" id="Home">
-            <div class="content-box">
+                <!-- Welcome message -->
                 <h2>Welcome, {{ username }}!</h2>
-                <p>This is your personal home page.</p>
-                <a href="{{ url_for('logout') }}">Logout</a>
+                <p>Connect with these potential skill exchange partners:</p>
             </div>
         </div>
 
@@ -62,21 +65,18 @@
             </div>
         </div>
 
-        <div class="tabcontent" id="Knowledge Repository">
-            <h2>Knowledge Repository</h2>
-            <p>Access your saved knowledge resources.</p>
-        </div>
-
-        <div class="tabcontent" id="Chat">
-            <h2>Chat</h2>
-            <p>Connect with your friends.</p>
-        </div>
-        
-        <div class="tabcontent" id="Friend List">
-            <h2>Friend List</h2>
-            <p>Manage your friends.</p>
+            <!-- Right section with the recommended people boxes -->
+            <div class="right-section">
+                <div class="people-grid">
+                    <div class="person-box">Person 1</div>
+                    <div class="person-box">Person 2</div>
+                    <div class="person-box">Person 3</div>
+                    <div class="person-box">Person 4</div>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 
 
     <footer>
@@ -84,11 +84,4 @@
     </footer>
 
     <script src="{{ url_for('static', filename='js/home.js') }}" defer></script>
-    <!-- Add the image at the bottom-center -->
-    {# <img src="{{ url_for('static', filename='images/bg-cartoon.jpg') }}" alt="Cartoon Background" class="bottom-image"> #}
-
-    <div style="display: flex; align-items: center; justify-content: space-between;">
-
-</div>
-
 {% endblock %}
