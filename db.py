@@ -2,13 +2,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 from models import *
-import bcrypt
 from datetime import datetime, timezone
 from pathlib import Path
 from sqlalchemy.sql import func
-import base64
-import binascii
-import pytz
 
 
 Path("database") \
