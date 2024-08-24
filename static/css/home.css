@@ -89,6 +89,8 @@ nav ul li a:hover {
     transition: background-color 0.3s ease;
     font-size: 17px;
     text-align: center;
+    font-family: 'Ubuntu', sans-serif; /* Change font to Ubuntu */
+    color: #ffffff; /* Set font color to white */
 }
 
 /* Hover effect for the tab buttons */
@@ -98,32 +100,15 @@ nav ul li a:hover {
 
 /* Active tab button */
 .tab button.active {
-    background-color: #ccc;
+    background-color: #aa3953;
+    color: #ffffff; /* Desired font color for active tab */
 }
 
 /* Content under each tab */
 .tabcontent {
     display: none;
     padding: 20px;
-    border: 1px solid #ccc;
-    border-top: none;
     background-color: rgba(255, 255, 255, 0.9); /* Match the tab background */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow to the content area */
-}
-
-#Home {
-    background-color: rgba(255, 255, 255, 0.7); /* White background with 70% opacity */
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    width: 100%;
-    text-align: center;
-    position: relative;
-    z-index: 1; /* Ensure content is above the overlay */
-    margin: auto; /* Center horizontally */
-    margin-top: auto; /* Push downwards */
-    margin-bottom: auto; /* Push upwards */
 }
 
 .main-content {
@@ -140,23 +125,44 @@ h2 {
     color: #aa3953; /* Font color */
     font-family: 'Ubuntu', sans-serif;
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 28px;
 }
 p {
     font-family: 'Ubuntu', sans-serif;
     color: #aa3953; /* Font color */
     font-weight: 500;
+    font-size: 18px;
 }
-.bottom-image {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: auto;
-    max-width: 100%;
-    height: auto;
-    max-height: 25%; /* Adjust this to control the height of the image */
-    z-index: 0;
+
+/* Image in the content box */
+.homepage-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+}
+
+
+/* Grid for recommended people */
+.people-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Each person's box */
+.person-box {
+    background-color: #acd7cd;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 150px;
 }
 
 footer {
@@ -175,4 +181,67 @@ footer p {
     font-size: 14px;
 }
 
+/********/
+/* Flex container for the image, welcome message, and people boxes */
+.content-box {
+    display: flex;
+    justify-content: space-between; /* Space between the left and right sections */
+    align-items: flex-start; /* Align items to the top */
+    
+    background-color: transparent; /* Remove background color */
+    padding: 50px;
+    border-radius: 0px;
+    box-shadow: none; /* Remove shadow */
+    max-width: 1200px; /* Adjust the max-width as needed */
+    width: 100%; /* Full width */
+    margin: auto; /* Center the content box */
+    gap: 40px; /* Space between the left and right sections */
+}
 
+/* Left section for the image and welcome message */
+.left-section {
+    flex: 1; /* Allow the section to grow */
+    max-width: 65%; /* Restrict the width */
+}
+
+/* Image styling */
+.homepage-image {
+    width: 100%;
+    max-width: 130%; /* Control the image size */
+    margin-bottom: 30px;
+}
+
+/* Right section for people grid */
+.right-section {
+    flex: 1; /* Allow the section to grow */
+    display: flex;
+    justify-content: center; /* Center the grid horizontally */
+    align-items: center; /* Center the grid vertically */
+    height: 100%; /* Ensure the right section takes the full height */
+}
+
+/* Grid for recommended people */
+.people-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Create two equal columns */
+    grid-gap: 30px; /* Space between the boxes */
+    justify-items: center; /* Center items within the grid */
+    width: 100%;
+    max-width: 400px; /* Control the width of the grid */
+    margin: auto; /* Center the grid within the right section */
+}
+
+/* Each person's box */
+.person-box {
+    background-color: #acd7cd;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 150px; /* Set a fixed width */
+    height: 150px; /* Set the height equal to the width to make it square */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px; /* Adjust font size as needed */
+}

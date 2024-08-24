@@ -74,13 +74,22 @@ def signup_user():
         flash("Error: User already exists!")
         return redirect(url_for('signup'))
 
+# @app.route("/home")
+# def home():
+#     user = db.get_user(session['username'])
+    
+#     if 'username' not in session:
+#         return redirect(url_for('login'))
+#     return render_template("home.jinja", username=session['username'], user=user)
+
 @app.route("/home")
 def home():
-    user = db.get_user(session['username'])
-    
     if 'username' not in session:
         return redirect(url_for('login'))
+
+    user = db.get_user(session['username'])
     return render_template("home.jinja", username=session['username'], user=user)
+
 
 @app.route("/logout")
 def logout():
