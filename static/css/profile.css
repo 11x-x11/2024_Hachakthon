@@ -33,7 +33,7 @@ body {
 /* Sidebar styling */
 .profile-sidebar {
     width: 35%;
-    background: linear-gradient(to bottom, #007BFF, #0056b3);
+    background: linear-gradient(to bottom, #acded2, #acd7cd);
     color: #fff;
     padding: 40px 20px;
     display: flex;
@@ -80,7 +80,7 @@ body {
     font-size: 30px;
     margin-bottom: 30px;
     color: #333;
-    border-bottom: 2px solid #007BFF;
+    border-bottom: 2px solid #acd7cd;
     padding-bottom: 10px;
     display: inline-block;
 }
@@ -112,7 +112,7 @@ body {
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
-    border-color: #007BFF;
+    border-color: #acd7cd;
     outline: none;
     background-color: #fff;
 }
@@ -179,12 +179,12 @@ body {
 }
 
 .edit-button {
-    background-color: #007BFF;
+    background-color: #acd7cd;
     color: #fff;
 }
 
 .edit-button:hover {
-    background-color: #0056b3;
+    background-color: #acd7cd;
 }
 
 .save-button {

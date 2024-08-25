@@ -52,6 +52,12 @@ body {
 
 .profile-icon {
     margin-left: auto; /* Align profile icon to the right */
+    border-radius: 50%;
+    padding: 5px;
+}
+
+.profile-icon.highlight {
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.8); /* Stronger highlight when active */
 }
 
 header h1 {

@@ -82,12 +82,20 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             element: document.querySelector(".tab button:nth-child(5)"),
             text: 'This is the Friends tab. Here you can manage your friends.'
+        },
+        {
+            element: document.querySelector(".profile-icon img"),
+            text: "On the top right side is your Profile setting as well as Log Out. Click on profile icon to view and edit your personal information and preferences."
         }
     ];
 
     const guideContainer = document.getElementById('guide-container');
     const guideText = document.getElementById('guide-text');
     const guideNextBtn = document.getElementById('guide-next-btn');
+
+    if (!localStorage.getItem('guideShown')) {
+        startGuide();
+    }
 
     function startGuide() {
         guideContainer.style.display = 'flex';
@@ -98,6 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (stepIndex < steps.length) {
             const step = steps[stepIndex];
             guideText.textContent = step.text;
+            console.log(step.element);
             highlightElement(step.element);
         } else {
             endGuide();
@@ -106,19 +115,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function highlightElement(element) {
         steps.forEach(step => step.element.classList.remove('highlight'));
+        console.log(element);
         element.classList.add('highlight');
     }
 
     function endGuide() {
         guideContainer.style.display = 'none';
         steps.forEach(step => step.element.classList.remove('highlight'));
+        localStorage.setItem('guideShown', 'true');
     }
 
     guideNextBtn.addEventListener('click', function() {
         currentStep++;
         showStep(currentStep);
     });
-
-    // Start the guide on page load
-    startGuide();
 });
